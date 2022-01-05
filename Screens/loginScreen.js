@@ -31,15 +31,15 @@ const loginScreen = () => {
         .catch(error => alert(error.message))
     }
   
-    // const handleLogin = () => {
-    //   auth
-    //     .signInWithEmailAndPassword(email, password)
-    //     .then(userCredentials => {
-    //       const user = userCredentials.user;
-    //       console.log('Logged in with:', user.email);
-    //     })
-    //     .catch(error => alert(error.message))
-    // }
+    const handleLogin = () => {
+      auth
+        .signInWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          console.log('Logged in with:', user.email);
+        })
+        .catch(error => alert(error.message))
+    }
 
     return (
         <KeyboardAvoidingView
@@ -68,7 +68,7 @@ const loginScreen = () => {
          <View 
          style ={styles.buttonContainer}>
              <TouchableOpacity
-             onPress = {() => {}}
+             onPress = {handleLogin}
              style = {styles.button}>
                  <Text style = {styles.buttonText}>Login</Text>
              </TouchableOpacity>
