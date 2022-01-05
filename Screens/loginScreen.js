@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {auth} from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { StyleSheet, Text, View } from 'react-native'
-import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native-web'
+import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
 
 const loginScreen = () => {
 
@@ -37,6 +37,7 @@ const loginScreen = () => {
         .then(userCredentials => {
           const user = userCredentials.user;
           console.log('Logged in with:', user.email);
+          console.log('User ID:', user.uid);
         })
         .catch(error => alert(error.message))
     }
@@ -103,8 +104,8 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     buttonContainer : {
-        width : '60%',
-        justifyContent:'centre',
+        width : '60%', 
+        justifyContent:'center',
         alignItems: 'center',
         marginTop : 40
     },
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius : 10,
         marginTop : 10,
-        alignItems : 'centre',
+        alignItems : 'center',
     },
     buttonOutline : {
         backgroundColor : 'white',
@@ -123,12 +124,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color : 'white',
-        fontWeight : 750,
+        fontWeight : '600',
         fontSize : 14
     },
     buttonOutlineText : {
         color : '#2B9AF6',
-        fontWeight : 750,
+        fontWeight : '600',
         fontSize : 14
     },
 })
