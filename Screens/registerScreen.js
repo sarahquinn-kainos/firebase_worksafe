@@ -34,10 +34,16 @@ const registerScreen = () => {
     // create a new user in firebase 
     const handleSignUp = () => {
       auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-          const user = userCredentials.user;
-          console.log('Registered with:', user.email);
+        .createUserWithEmailAndPassword(email, password).then((userCredentials)=>{
+            const displayName = fName + " " + sName;
+            if(userCredentials.user){
+              userCredentials.user.updateProfile({
+                displayName: displayName
+              }).then((s)=> {
+                navigation.navigate('Home');
+                console.log(userCredentials.user.displayName)
+              })
+            }
         })
         .catch(error => alert(error.message))
     }
