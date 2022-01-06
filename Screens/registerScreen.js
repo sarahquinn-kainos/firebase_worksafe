@@ -42,6 +42,10 @@ const registerScreen = () => {
         .catch(error => alert(error.message))
     }
 
+    const backToLogin = () => {
+        navigation.navigate("Login");
+    }
+
 
     return (
         //Input fields &  Buttons
@@ -87,6 +91,11 @@ const registerScreen = () => {
              onPress = {handleSignUp}
              style = {[styles.button, styles.buttonOutline]}>
                  <Text style = {styles.buttonOutlineText}>Register</Text>
+             </TouchableOpacity>
+             <TouchableOpacity
+             onPress = {backToLogin}
+             style = {[styles.button, styles.buttonOutline]}>
+                 <Text style = {styles.buttonOutlineText}>Back to Login</Text>
              </TouchableOpacity>
          </View>
         </KeyboardAvoidingView>
