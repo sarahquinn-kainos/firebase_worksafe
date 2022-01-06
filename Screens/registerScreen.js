@@ -4,11 +4,15 @@ import { useNavigation } from '@react-navigation/core'
 import { StyleSheet, Text, View } from 'react-native'
 import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
 
-const loginScreen = () => {
+
+const registerScreen = () => {
+
 
     // const for storing user input fields
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [fName, setFName] = useState('')
+    const [sName, setSName] = useState('')
   
     const navigation = useNavigation()
   
@@ -29,37 +33,38 @@ const loginScreen = () => {
   
     // create a new user in firebase 
     const handleSignUp = () => {
-        navigation.replace("Register")
-    //   auth
-    //     .createUserWithEmailAndPassword(email, password)
-    //     .then(userCredentials => {
-    //       const user = userCredentials.user;
-    //       console.log('Registered with:', user.email);
-    //     })
-    //     .catch(error => alert(error.message))
-    }
-  
-
-    // login with firebase auth 
-    const handleLogin = () => {
       auth
-        .signInWithEmailAndPassword(email, password)
+        .createUserWithEmailAndPassword(email, password)
         .then(userCredentials => {
           const user = userCredentials.user;
-          console.log('Logged in with:', user.email);
-          console.log('User ID:', user.uid);
+          console.log('Registered with:', user.email);
         })
         .catch(error => alert(error.message))
     }
+
 
     return (
         //Input fields &  Buttons
         <KeyboardAvoidingView
         style={styles.container}
         behaviour = "padding">
+
         <View
          style={styles.inputContainer}
          behaviour = "padding">
+              <TextInput 
+             placeholder="First Name"
+             value={fName}
+             onChangeText={text => setFName(text)}
+             style = {styles.input}>
+             </TextInput>
+
+             <TextInput 
+             placeholder="Surname"
+             value={sName}
+             onChangeText={text => setSName(text)}
+             style = {styles.input}>
+             </TextInput>
              <TextInput 
              placeholder="Email"
              value={email}
@@ -79,22 +84,16 @@ const loginScreen = () => {
          <View 
          style ={styles.buttonContainer}>
              <TouchableOpacity
-             onPress = {handleLogin}
-             style = {styles.button}>
-                 <Text style = {styles.buttonText}>Login</Text>
-             </TouchableOpacity>
-             <TouchableOpacity
              onPress = {handleSignUp}
              style = {[styles.button, styles.buttonOutline]}>
                  <Text style = {styles.buttonOutlineText}>Register</Text>
              </TouchableOpacity>
-
          </View>
         </KeyboardAvoidingView>
     )
 }
 
-export default loginScreen
+export default registerScreen
 
 const styles = StyleSheet.create({
     container: {
