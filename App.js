@@ -16,11 +16,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Main'>
-        <Stack.Screen name="Login" component={loginScreen} options = {{ headerShown : false}}/>
+        <Stack.Screen name="Login" component={loginScreen} options = {{ headerTitle : "WorkSafe Login", headerTitleAlign: 'center'}}/>
         <Stack.Screen name="Home" component={homeScreen} />
-        <Stack.Screen name="Register" component={registerScreen}/>
+        <Stack.Screen name="Register" component={registerScreen} options = {{ headerTitle : "Register a New Account", headerTitleAlign: 'center'}}/>
         <Stack.Screen name="AdminDash" component={adminDashboard} />
-        <Stack.Screen name="ForgotPassword" component={forgotPassword} />
+        <Stack.Screen name="ForgotPassword" component={forgotPassword} options = {{ headerTitle : "Forgot My Password", headerTitleAlign: 'center'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
