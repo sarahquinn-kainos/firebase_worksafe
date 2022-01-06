@@ -12,10 +12,8 @@ const forgotPassword = () => {
 
     const sendResetPasswordEmail = () => {
         auth.sendPasswordResetEmail(email)
-        .catch(error => alert(error.message)).then(
-            alert("Form Submitted."),
+        .catch(error => alert(error.message))
             navigation.navigate('Login')
-        )
     }
     const [email, setEmail] = useState('')
 

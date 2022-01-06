@@ -92,9 +92,8 @@ const loginScreen = () => {
              style = {[styles.button, styles.buttonOutline]}>
                  <Text style = {styles.buttonOutlineText}>Register</Text>
              </TouchableOpacity>
-             <TouchableOpacity onPress = {forgotPassword} style={{ paddingTop: 50,flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-             <Text>Forgot Password</Text>
-             </TouchableOpacity>
+             <Text onPress = {forgotPassword} 
+             style={{ paddingTop: 50, justifyContent: 'center', alignItems: 'center' }}>Forgot Password</Text>
          </View>
         </KeyboardAvoidingView>
     )
