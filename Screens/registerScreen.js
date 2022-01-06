@@ -95,8 +95,8 @@ const registerScreen = () => {
          style ={styles.buttonContainer}>
              <TouchableOpacity
              onPress = {handleSignUp}
-             style = {[styles.button, styles.buttonOutline]}>
-                 <Text style = {styles.buttonOutlineText}>Register</Text>
+             style = {[styles.button]}>
+                 <Text style = {styles.buttonText}>Register</Text>
              </TouchableOpacity>
              <TouchableOpacity
              onPress = {backToLogin}
