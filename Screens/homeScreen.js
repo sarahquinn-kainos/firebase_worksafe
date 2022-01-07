@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { auth } from '../firebase'
 import { firestore } from '../firebase'
+import showVerifiedHome from './homescreenVerifiedView'
+import showUnverifiedHome from './homescreenUnverifiedView'
 
 const homeScreen = () => {
     const user = auth.currentUser;
@@ -35,28 +37,11 @@ const homeScreen = () => {
 
         getUserDocument();
 
-
-
-
-
         if (user.emailVerified) {
-            return (
-                <View>
-                    <Text>Default Home Screen</Text>
-                    <Text>{email}</Text>
-                    <Text>{displayName}</Text>
-                    <Text>Your email address has been verified.</Text>
-                </View>
-            )
+            return(showVerifiedHome())
+            
         } else {
-            return (
-                <View>
-                    <Text>Default Home Screen</Text>
-                    <Text>{email}</Text>
-                    <Text>{displayName}</Text>
-                    <Text>Your email address has not been verified. Please check your inbox and spam folders.</Text>
-                </View>
-            )
+            return(showUnverifiedHome())
         }
     }
 
