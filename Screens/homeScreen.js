@@ -18,24 +18,16 @@ const homeScreen = () => {
         };
 
 
-        // get data from firestore with a snapshot 
+        // get data from firestore using UID as doc ID
         const getUserDocument = async () => {
-            const snapshot = await firestore
-                // WHOLE COLLECTION
-                //.collection('Users').get();
-                //const myDocs = snapshot.docs.map(collectIdsAndDocs);
+            const snapshot = await firestore.collection('Users').doc(user.uid).get();
+            const myDoc = snapshot.data()
+            console.log(myDoc);
 
-                //SINGLE DOCUMENT
-                .collection('Users').doc(user.uid).get();
-            const myDocs = snapshot.data()
-            console.log(myDocs);
-
-            //FIELD VALUE ONLY
-            //console.log(myDocs.account_type);
-            return myDocs;
+            return myDoc;
         }
 
-        getUserDocument();
+        //getUserDocument();
 
         if (user.emailVerified) {
             return(showVerifiedHome())
