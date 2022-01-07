@@ -35,27 +35,29 @@ const homeScreen = () => {
 
         getUserDocument();
 
-        const emailVerifiedView = () => {
-            const user = auth.currentUser;
-            if (user.emailVerified) {
-                return("Your email address has been verified.")
-            } else {
-                return("Your email address has not been verified. Please check your inbox and spam folders.")
-            }
+
+
+
+
+        if (user.emailVerified) {
+            return (
+                <View>
+                    <Text>Default Home Screen</Text>
+                    <Text>{email}</Text>
+                    <Text>{displayName}</Text>
+                    <Text>Your email address has been verified.</Text>
+                </View>
+            )
+        } else {
+            return (
+                <View>
+                    <Text>Default Home Screen</Text>
+                    <Text>{email}</Text>
+                    <Text>{displayName}</Text>
+                    <Text>Your email address has not been verified. Please check your inbox and spam folders.</Text>
+                </View>
+            )
         }
-
-
-
-
-
-        return (
-            <View>
-                <Text>Default Home Screen</Text>
-                <Text>{email}</Text>
-                <Text>{displayName}</Text>
-                <Text>{emailVerifiedView()}</Text>
-            </View>
-        )
     }
 
 }
