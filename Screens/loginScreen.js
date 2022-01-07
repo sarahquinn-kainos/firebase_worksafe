@@ -34,7 +34,7 @@ const loginScreen = () => {
             if (user) {
 
                 const account_type = await getUserAccountType();
-                console.log("\n\n===LOG===\n ACCOUNT TYPE ADMIN: " + account_type)
+                console.log("\n\n===LOG===\n ACCOUNT TYPE : " + account_type)
                 if (account_type == "super_user" || account_type == "admin") { // replace with role value later
                     navigation.replace("AdminDash")
                 } else {

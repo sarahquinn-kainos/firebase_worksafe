@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {auth} from '../firebase'
+import React, { useState, useEffect } from 'react'
+import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { StyleSheet, Text, View } from 'react-native'
 import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
@@ -13,39 +13,40 @@ const registerScreen = () => {
     const [password, setPassword] = useState('')
     const [fName, setFName] = useState('')
     const [sName, setSName] = useState('')
-  
+
     const navigation = useNavigation()
-  
+
     // change page after login 
     useEffect(() => {
-      const unsubscribe = auth.onAuthStateChanged(user => {
-        if (user) {
-            if (user.uid == "vJ1wPthO22eyMQ6iu8ukcZVwQWB3"){ // replace with role value later
-                navigation.replace("AdminDash")
-            }else{
-                navigation.replace("Home")
-            }
-        }
-      })
-  
-      return unsubscribe
-    }, [])
-  
-    // create a new user in firebase 
-    const handleSignUp = () => {
-      auth
-        .createUserWithEmailAndPassword(email, password).then((userCredentials)=>{
-            const displayName = fName + " " + sName;
-            if(userCredentials.user){
-              userCredentials.user.updateProfile({
-                displayName: displayName
-              }).then((s)=> {
-                navigation.navigate('Home');
-                console.log(userCredentials.user.displayName)
-              })
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                if (user.uid == "vJ1wPthO22eyMQ6iu8ukcZVwQWB3") { // replace with role value later
+                    navigation.replace("AdminDash")
+                } else {
+                    navigation.replace("Home")
+                }
             }
         })
-        .catch(error => alert(error.message))
+
+        return unsubscribe
+    }, [])
+
+    // create a new user in firebase 
+    const handleSignUp = () => {
+        auth
+            .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
+                const displayName = fName + " " + sName;
+                if (userCredentials.user) {
+                    userCredentials.user.sendEmailVerification();
+                    userCredentials.user.updateProfile({
+                        displayName: displayName
+                    }).then((s) => {
+                        navigation.navigate('Home');
+                        console.log(userCredentials.user.displayName)
+                    })
+                }
+            })
+            .catch(error => alert(error.message))
     }
 
     const backToLogin = () => {
@@ -56,54 +57,54 @@ const registerScreen = () => {
     return (
         //Input fields &  Buttons
         <KeyboardAvoidingView
-        style={styles.container}
-        behaviour = "padding">
+            style={styles.container}
+            behaviour="padding">
 
-        <View
-         style={styles.inputContainer}
-         behaviour = "padding">
-              <TextInput 
-             placeholder="First Name"
-             value={fName}
-             onChangeText={text => setFName(text)}
-             style = {styles.input}>
-             </TextInput>
+            <View
+                style={styles.inputContainer}
+                behaviour="padding">
+                <TextInput
+                    placeholder="First Name"
+                    value={fName}
+                    onChangeText={text => setFName(text)}
+                    style={styles.input}>
+                </TextInput>
 
-             <TextInput 
-             placeholder="Surname"
-             value={sName}
-             onChangeText={text => setSName(text)}
-             style = {styles.input}>
-             </TextInput>
-             <TextInput 
-             placeholder="Email"
-             value={email}
-             onChangeText={text => setEmail(text)}
-             style = {styles.input}>
-             </TextInput>
+                <TextInput
+                    placeholder="Surname"
+                    value={sName}
+                    onChangeText={text => setSName(text)}
+                    style={styles.input}>
+                </TextInput>
+                <TextInput
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={text => setEmail(text)}
+                    style={styles.input}>
+                </TextInput>
 
-             <TextInput 
-             placeholder="Password"
-             value={password}
-             onChangeText={text => setPassword(text)}
-             style = {styles.input}
-             secureTextEntry>
-             </TextInput>
+                <TextInput
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={text => setPassword(text)}
+                    style={styles.input}
+                    secureTextEntry>
+                </TextInput>
 
-         </View>
-         <View 
-         style ={styles.buttonContainer}>
-             <TouchableOpacity
-             onPress = {handleSignUp}
-             style = {[styles.button]}>
-                 <Text style = {styles.buttonText}>Register</Text>
-             </TouchableOpacity>
-             <TouchableOpacity
-             onPress = {backToLogin}
-             style = {[styles.button, styles.buttonOutline]}>
-                 <Text style = {styles.buttonOutlineText}>Back to Login</Text>
-             </TouchableOpacity>
-         </View>
+            </View>
+            <View
+                style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={handleSignUp}
+                    style={[styles.button]}>
+                    <Text style={styles.buttonText}>Register</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={backToLogin}
+                    style={[styles.button, styles.buttonOutline]}>
+                    <Text style={styles.buttonOutlineText}>Back to Login</Text>
+                </TouchableOpacity>
+            </View>
         </KeyboardAvoidingView>
     )
 }
@@ -117,43 +118,43 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    inputContainer : {
+    inputContainer: {
         width: '80%',
     },
-    input : {
+    input: {
         backgroundColor: 'white',
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
         marginTop: 10
     },
-    buttonContainer : {
-        width : '60%', 
-        justifyContent:'center',
+    buttonContainer: {
+        width: '60%',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop : 40
+        marginTop: 40
     },
-    button : {
-        backgroundColor : '#2B9AF6',
-        width : '100%',
+    button: {
+        backgroundColor: '#2B9AF6',
+        width: '100%',
         padding: 15,
-        borderRadius : 10,
-        marginTop : 10,
-        alignItems : 'center',
+        borderRadius: 10,
+        marginTop: 10,
+        alignItems: 'center',
     },
-    buttonOutline : {
-        backgroundColor : 'white',
+    buttonOutline: {
+        backgroundColor: 'white',
         borderColor: '#2B9AF6',
-        borderWidth : 2,
+        borderWidth: 2,
     },
     buttonText: {
-        color : 'white',
-        fontWeight : '600',
-        fontSize : 14
+        color: 'white',
+        fontWeight: '600',
+        fontSize: 14
     },
-    buttonOutlineText : {
-        color : '#2B9AF6',
-        fontWeight : '600',
-        fontSize : 14
+    buttonOutlineText: {
+        color: '#2B9AF6',
+        fontWeight: '600',
+        fontSize: 14
     },
 })
