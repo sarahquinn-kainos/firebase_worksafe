@@ -49,13 +49,6 @@ const loginScreen = () => {
     // create a new user in firebase 
     const handleSignUp = () => {
         navigation.replace("Register")
-        //   auth
-        //     .createUserWithEmailAndPassword(email, password)
-        //     .then(userCredentials => {
-        //       const user = userCredentials.user;
-        //       console.log('Registered with:', user.email);
-        //     })
-        //     .catch(error => alert(error.message))
     }
 
 
