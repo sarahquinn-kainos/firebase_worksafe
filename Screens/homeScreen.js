@@ -1,8 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { withSafeAreaInsets } from 'react-native-safe-area-context'
 import { auth } from '../firebase'
-//import firestore from '@react-native-firebase/firestore';
 import { firestore } from '../firebase'
 
 const homeScreen = () => {
@@ -26,10 +24,10 @@ const homeScreen = () => {
             //const myDocs = snapshot.docs.map(collectIdsAndDocs);
 
             //SINGLE DOCUMENT
-            .collection('Users').doc('123').get();
+            .collection('Users').doc(user.uid).get();
             const myDocs = snapshot.data()
             console.log(myDocs);
-            
+
             //FIELD VALUE ONLY
             console.log(myDocs.test);
             return myDocs;
