@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { auth } from '../firebase'
 import { firestore } from '../firebase'
-import getSingleDocByDocId from '../Javascript/firestore'
+import {getSingleDocByDocId, getUsersCollection} from '../Javascript/firestore'
 
 const showVerifiedHome = () => {
 
@@ -11,7 +11,9 @@ const showVerifiedHome = () => {
         getSingleDocByDocId(user.uid).then(function (result){
             console.log(result)
         })
-        
+        getUsersCollection().then(function (result){
+            console.log(result)
+        })
         return (
             <View>
                 <Text>Default Home Screen</Text>

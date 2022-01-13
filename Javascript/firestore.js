@@ -2,7 +2,7 @@ import { auth } from '../firebase'
 import { firestore } from '../firebase'
 
 
-const getSingleDocByDocId = async (documentID) => {
+async function getSingleDocByDocId(documentID){
     const user = auth.currentUser;
     var result;
     if (user) {
@@ -14,7 +14,6 @@ const getSingleDocByDocId = async (documentID) => {
             return (myDoc)
         }
         result = await getUserDocument().then(function (response) {
-            console.log(response);
             return response
         })
     }
@@ -22,7 +21,7 @@ const getSingleDocByDocId = async (documentID) => {
 }
 
 
-function getUsersCollection(){
+async function getUsersCollection(){
     const user = auth.currentUser;
     var result;
 
@@ -39,12 +38,11 @@ function getUsersCollection(){
                 const myDocs = snapshot.docs.map(collectIdsAndDocs);
             return (myDocs)
         }
-        getUserDocument().then(function (response) {
-            console.log(response);
-            result = response;
+        result = await getUserDocument().then(function (response) {
+            return response;
         })
     }
     return result;
 }
 
-export default getSingleDocByDocId
+export {getSingleDocByDocId, getUsersCollection}
