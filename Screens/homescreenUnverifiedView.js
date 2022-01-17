@@ -1,8 +1,18 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
 import { auth } from '../firebase'
-import { firestore } from '../firebase'
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons';
+import {
+    Box,
+    Heading,
+    AspectRatio,
+    Image,
+    Text,
+    Center,
+    HStack,
+    Stack,
+    NativeBaseProvider,VStack, Button, IconButton, Icon, StatusBar 
+  } from "native-base"
+
 
 const sendResetPasswordEmail = () => {
     const user = auth.currentUser;
@@ -12,55 +22,50 @@ const sendResetPasswordEmail = () => {
     )
         .catch(error => alert(error.message))
 }
+function AppBar(){
+    return (
+      <>
+          <StatusBar backgroundColor="#3700B3" barStyle="light-content" />
+  
+          <Box safeAreaTop backgroundColor="#6200ee" />
+  
+          <HStack bg='#6200ee' px="1" py="3" justifyContent='space-between' alignItems='center'>
+            <HStack space="4" alignItems='center'>
+              <IconButton icon={<Icon size="sm" as={<MaterialIcons name='menu' />} color="white" />} />
+              <Text color="white" fontSize="20" fontWeight='bold'>Home</Text>
+            </HStack>
+            <HStack space="2">
+              <IconButton icon={<Icon as={<MaterialIcons name='favorite' />} size='sm' color="white" />} />
+              <IconButton icon={<Icon as={<MaterialIcons name='search' />}
+              color="white" size='sm'  />} />
+              <IconButton icon={<Icon as={<MaterialIcons name='more-vert' />} size='sm' color="white" />} />
+            </HStack>
+          </HStack>
+  
+      </>
+    )
+  }
+  
 
 const showUnerifiedHome = () => {
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behaviour="padding">
+
+        <NativeBaseProvider>
+        <AppBar/>
+        <Center mt="15%">
                 <Text>Default Home Screen</Text>
                 <br></br>
                 <Text>Your email address has not been verified</Text>
                 <Text>Please check your inbox and spam folders.</Text>
-                <View
-                    style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        onPress={sendResetPasswordEmail}
-                        style={[styles.button]}>
-                        <Text style={styles.buttonText}>Re-send Verification Email</Text>
-                    </TouchableOpacity>
-                </View>
-        </KeyboardAvoidingView>
-
+                <Center>
+                    <Button 
+                        onPress={sendResetPasswordEmail}>
+                        <Text color="white">Re-send Verification Email</Text>
+                    </Button>
+                </Center>
+        </Center>
+      </NativeBaseProvider>
     )
 }
 export default showUnerifiedHome
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonContainer: {
-        width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40
-    },
-    button: {
-        backgroundColor: '#2B9AF6',
-        width: '100%',
-        padding: 15,
-        borderRadius: 10,
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '600',
-        fontSize: 14
-    }
-})
