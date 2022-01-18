@@ -45,4 +45,20 @@ async function getUsersCollection(){
     return result;
 }
 
-export {getSingleDocByDocId, getUsersCollection}
+
+function writeDocumentToCollection(collection, uid, document) {
+    //const [ thisDoc, setThisDoc ] = useState(document);
+    const ref = firestore.collection(collection);
+    
+    async function addDocument() {
+      await ref.doc(uid).set(document).then(
+          console.log("Document Pushed to Collection: " + collection)
+      ).catch((err) => {
+            console.error(err);
+          }
+      );
+    }
+    addDocument();
+  }
+
+export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection}
