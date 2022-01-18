@@ -3,6 +3,7 @@ import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { StyleSheet, Text, View } from 'react-native'
 import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
+import { writeDocumentToCollection} from '../Javascript/firestore'
 
 
 const registerScreen = () => {
@@ -24,6 +25,7 @@ const registerScreen = () => {
                     navigation.replace("AdminDash")
                 } else {
                     navigation.replace("Home")
+
                 }
             }
         })
@@ -36,11 +38,17 @@ const registerScreen = () => {
         auth
             .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
                 const displayName = fName + " " + sName;
+                const uid = userCredentials.user.uid;
                 if (userCredentials.user) {
                     userCredentials.user.sendEmailVerification();
                     userCredentials.user.updateProfile({
                         displayName: displayName
                     }).then((s) => {
+                        var newUserDoc = {
+                            "account_type": "standard",
+                            "email": email
+                        };
+                        writeDocumentToCollection('Users', uid ,newUserDoc);
                         navigation.navigate('Home');
                         console.log(userCredentials.user.displayName)
                     })
