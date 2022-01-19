@@ -37,16 +37,18 @@ const registerScreen = () => {
     const handleSignUp = () => {
         auth
             .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
-                const displayName = fName + " " + sName;
+                const displayName = fName;
                 const uid = userCredentials.user.uid;
                 if (userCredentials.user) {
                     userCredentials.user.sendEmailVerification();
                     userCredentials.user.updateProfile({
                         displayName: displayName
-                    }).then((s) => {
+                    }).then(() => {
                         var newUserDoc = {
                             "account_type": "standard",
-                            "email": email
+                            "email": email,
+                            "first_name": fName,
+                            "surname": sName
                         };
                         writeDocumentToCollection('Users', uid ,newUserDoc);
                         navigation.navigate('Home');
