@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, setState, state} from 'react'
 import { auth } from '../firebase'
 import { MaterialIcons } from '@expo/vector-icons';
 import {
@@ -12,8 +12,11 @@ import {
     Stack,
     NativeBaseProvider,VStack, Button, IconButton, Icon, StatusBar 
   } from "native-base"
+import { render } from 'react-dom';
+import { ActivityIndicator } from 'react-native-web';
+import { TextPropTypes } from 'react-native';
 
-
+  
 const sendResetPasswordEmail = () => {
     const user = auth.currentUser;
     const email = user.email;
@@ -35,7 +38,6 @@ function AppBar(){
               <Text color="white" fontSize="20" fontWeight='bold'>Home</Text>
             </HStack>
             <HStack space="2">
-              <IconButton icon={<Icon as={<MaterialIcons name='favorite' />} size='sm' color="white" />} />
               <IconButton icon={<Icon as={<MaterialIcons name='search' />}
               color="white" size='sm'  />} />
               <IconButton icon={<Icon as={<MaterialIcons name='more-vert' />} size='sm' color="white" />} />
@@ -47,24 +49,35 @@ function AppBar(){
   }
   
 const showUnerifiedHome = () => {
+    const user = auth.currentUser;
+    const [displayName, setdisplayName] = useState(user.displayName ? user.displayName : '');
 
-    return (
+    useEffect(() => {
+        if (user.displayName) {
+            setdisplayName(user.displayName)
+        }
+       }, []);
 
-        <NativeBaseProvider>
-        <AppBar/>
-        <Center mt="15%">
-                <Text>Default Home Screen</Text>
-                <br></br>
-                <Text>Your email address has not been verified</Text>
-                <Text>Please check your inbox and spam folders.</Text>
-                <Center>
-                    <Button 
-                        onPress={sendResetPasswordEmail}>
-                        <Text color="white">Re-send Verification Email</Text>
-                    </Button>
-                </Center>
-        </Center>
-      </NativeBaseProvider>
-    )
-}
+        return (
+
+            <NativeBaseProvider>
+            <AppBar/>
+            <Center mt="15%">
+                    <Text>Hello {displayName}!</Text>
+                    <br></br>
+                    <Text>Your email address has not been verified</Text>
+                    <Text>Please check your inbox and spam folders.</Text>
+                    <br/>
+                    <Center>
+                        <Button 
+                                onPress={sendResetPasswordEmail}>
+                            <Text color="white">Re-send Verification Email</Text>
+                        </Button>
+                    </Center>
+            </Center>
+          </NativeBaseProvider>
+        )
+    
+    }
+    
 export default showUnerifiedHome
