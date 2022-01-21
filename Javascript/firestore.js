@@ -61,4 +61,20 @@ function writeDocumentToCollection(collection, uid, document) {
     addDocument();
   }
 
-export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection}
+function addSubCollectionToExistingDocumentById(collection, subCollection, id, documentData){
+    const ref = firestore.collection(collection);
+    
+    async function addSubCollecionToDoc() {
+        await ref.doc(id).collection(subCollection).doc(id).set(documentData)
+        .then(()=>{
+            console.log("Sub-Collection has been added to Firestore. [Collection: "+ collection + ", Document ID:" + id + "]")
+        }).catch((err) => {
+            console.error(err);
+          }
+      );
+    }
+    addSubCollecionToDoc();
+
+} 
+
+export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById}
