@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { StyleSheet, Text, View } from 'react-native'
-import { KeyboardAvoidingView, TextInput, TouchableOpacity } from 'react-native'
+
 import { writeDocumentToCollection} from '../Javascript/firestore'
 
 
