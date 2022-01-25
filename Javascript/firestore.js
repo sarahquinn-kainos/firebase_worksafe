@@ -20,6 +20,24 @@ async function getSingleDocByDocId(documentID){
     return result;
 }
 
+async function getUserSubCollectionDocById(subCollection, id){
+    const user = auth.currentUser;
+    var result;
+    if (user) {
+        // get data from firestore with a snapshot 
+        const getUserDocument = async () => {
+            const snapshot = await firestore
+                .collection('Users').doc(id).collection(subCollection).doc(id).get()
+            const myDoc = snapshot.data()
+            return (myDoc)
+        }
+        result = await getUserDocument().then(function (response) {
+            return response
+        })
+    }
+    return result;
+}
+
 
 async function getUsersCollection(){
     const user = auth.currentUser;
@@ -77,4 +95,4 @@ function addSubCollectionToExistingDocumentById(collection, subCollection, id, d
 
 } 
 
-export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById}
+export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById, getUserSubCollectionDocById}
