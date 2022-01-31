@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { auth } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
-import { StyleSheet, Text, View } from 'react-native'
-
-import { writeDocumentToCollection} from '../Javascript/firestore'
+import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack } from "native-base"
+import { writeDocumentToCollection } from '../Javascript/firestore'
 
 
 const registerScreen = () => {
@@ -50,7 +49,7 @@ const registerScreen = () => {
                             "first_name": fName,
                             "surname": sName
                         };
-                        writeDocumentToCollection('Users', uid ,newUserDoc);
+                        writeDocumentToCollection('Users', uid, newUserDoc);
                         navigation.navigate('Home');
                         console.log(userCredentials.user.displayName)
                     })
@@ -66,105 +65,52 @@ const registerScreen = () => {
 
     return (
         //Input fields &  Buttons
-        <KeyboardAvoidingView
-            style={styles.container}
-            behaviour="padding">
+        <NativeBaseProvider>
+            <KeyboardAvoidingView>
 
-            <View
-                style={styles.inputContainer}
-                behaviour="padding">
-                <TextInput
-                    placeholder="First Name"
-                    value={fName}
-                    onChangeText={text => setFName(text)}
-                    style={styles.input}>
-                </TextInput>
-
-                <TextInput
-                    placeholder="Surname"
-                    value={sName}
-                    onChangeText={text => setSName(text)}
-                    style={styles.input}>
-                </TextInput>
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.input}>
-                </TextInput>
-
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input}
-                    secureTextEntry>
-                </TextInput>
-
-            </View>
-            <View
-                style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={handleSignUp}
-                    style={[styles.button]}>
-                    <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={backToLogin}
-                    style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}>Back to Login</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                <VStack space={4} alignItems="center">
+                    <Center mx="auto" w="80%" px="45" py="50" >
+                        <Input
+                            placeholder="First Name"
+                            value={fName}
+                            onChangeText={text => setFName(text)}>
+                        </Input>
+                        <br />
+                        <Input
+                            placeholder="Surname"
+                            value={sName}
+                            onChangeText={text => setSName(text)}>
+                        </Input>
+                        <br/>
+                        <Input
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={text => setEmail(text)}>
+                        </Input>
+                        <br />
+                        <Input
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={text => setPassword(text)}
+                            secureTextEntry>
+                        </Input>
+                        <br/><br/>
+                            <Button
+                                w="100%"
+                                onPress={handleSignUp}>
+                                <Text>Register</Text>
+                            </Button>
+                            <br/>
+                            <Button
+                              w="100%"
+                                onPress={backToLogin}>
+                                <Text>Back to Login</Text>
+                            </Button>
+                    </Center>
+                </VStack>
+            </KeyboardAvoidingView>
+        </NativeBaseProvider>
     )
 }
 
 export default registerScreen
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
-    inputContainer: {
-        width: '80%',
-    },
-    input: {
-        backgroundColor: 'white',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 10
-    },
-    buttonContainer: {
-        width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40
-    },
-    button: {
-        backgroundColor: '#2B9AF6',
-        width: '100%',
-        padding: 15,
-        borderRadius: 10,
-        marginTop: 10,
-        alignItems: 'center',
-    },
-    buttonOutline: {
-        backgroundColor: 'white',
-        borderColor: '#2B9AF6',
-        borderWidth: 2,
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '600',
-        fontSize: 14
-    },
-    buttonOutlineText: {
-        color: '#2B9AF6',
-        fontWeight: '600',
-        fontSize: 14
-    },
-})
