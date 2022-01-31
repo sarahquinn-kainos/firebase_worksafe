@@ -3,7 +3,6 @@ import { auth } from '../firebase'
 import { firestore } from '../firebase'
 import { useNavigation } from '@react-navigation/core'
 import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack } from "native-base"
-import { covidCheckPointModal } from './covidCheckpointModal'
 
 const loginScreen = () => {
 
