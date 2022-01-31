@@ -68,9 +68,11 @@ export function AccountOptions() {
             <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
                 <Button variant="ghost" onPress={() => setShowLogoutModal(true)}><Text bold color="white">Logout</Text></Button>
             </Center>
+            <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
+                <Button variant="ghost" onPress={() => navigation.replace("CovidCheckpoint")}><Text bold color="white">DEV TEST Covid Checkpoint Form</Text></Button>
+            </Center>
             <LogoutModal />
         </VStack>
-
     )
 }
 

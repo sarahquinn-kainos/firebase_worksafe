@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 import { auth } from '../firebase'
-import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack, Flex } from "native-base"
+import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack } from "native-base"
 import { useNavigation } from '@react-navigation/native';
 
 

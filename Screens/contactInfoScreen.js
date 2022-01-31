@@ -60,7 +60,7 @@ const PageData = () => {
                 }
             }
             try {
-                addSubCollectionToExistingDocumentById('Users', 'ContactInfo', user.uid, formDataJSON);
+                addSubCollectionToExistingDocumentById('Users', 'ContactInfo', user.uid, user.uid, formDataJSON);
                 setIsSubmitted('success');
                 getCurrentInfo();
             }

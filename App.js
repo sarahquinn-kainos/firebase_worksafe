@@ -8,6 +8,7 @@ import registerScreen from './Screens/registerScreen';
 import forgotPassword from './Screens/forgotPassword';
 import accountManageScreen from './Screens/accountManage'; 
 import userContactInfoScreen from './Screens/contactInfoScreen';
+import covidCheckPointModal from './Screens/covidCheckpointModal';
 
 
 const Stack = createNativeStackNavigator();
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="AdminDash" component={adminDashboard} options = {{ headerTitle : "Home - Admin", headerTitleAlign: 'center'}}/>
         <Stack.Screen name="AccountManage" component={accountManageScreen} options = {{ headerTitle : "My Account", headerTitleAlign: 'center'}}/>
         <Stack.Screen name="ForgotPassword" component={forgotPassword} options = {{ headerTitle : "Forgot My Password", headerTitleAlign: 'center'}}/>
+        <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options = {{ headerShown: false}}/>
         <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} options = {{ headerTitle : "My Contact Info", headerTitleAlign: 'center'}}/>
       </Stack.Navigator>
     </NavigationContainer>
