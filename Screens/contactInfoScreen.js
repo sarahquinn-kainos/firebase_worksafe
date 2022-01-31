@@ -196,21 +196,21 @@ const PageData = () => {
                     <VStack>
                         <HStack pt="1">
                             <Text >Phone Number:  </Text>
-                            <Text>{currentContactDoc.emergencyContacts?.contactInfo &&
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
                                 currentContactDoc.emergencyContacts.contactInfo.full_name}</Text>
                         </HStack>
                     </VStack>
                     <VStack>
                         <HStack pt="1">
                             <Text >Relationship:  </Text>
-                            <Text>{currentContactDoc.emergencyContacts?.contactInfo &&
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
                                 currentContactDoc.emergencyContacts.contactInfo.relationship}</Text>
                         </HStack>
                     </VStack>
                     <VStack>
                         <HStack pt="1">
                             <Text >Name:  </Text>
-                            <Text>{currentContactDoc.emergencyContacts?.contactInfo &&
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
                                 currentContactDoc.emergencyContacts.contactInfo.phone}</Text>
                         </HStack>
                     </VStack>
@@ -228,7 +228,7 @@ const PageData = () => {
                         <HStack>
                             <Text>Phone Number:  </Text>
                             <br /><br />
-                            <Text>{currentContactDoc.emergencyContacts &&
+                            <Text>{currentContactDoc?.personal_phone &&
                                 currentContactDoc.personal_phone}</Text>
                         </HStack>
                     </VStack>
