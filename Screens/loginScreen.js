@@ -74,7 +74,7 @@ const loginScreen = () => {
                             value={email}
                             onChangeText={text => setEmail(text)}>
                         </Input>
-                        <br />
+                         <Text>{"\n"}</Text>
                         <Input
                             w="100%"
                             placeholder="Password"
@@ -88,12 +88,12 @@ const loginScreen = () => {
                             onPress={handleLogin}>
                             <Text >Login</Text>
                         </Button>
-                        <br />
+                         <Text>{"\n"}</Text>
                         <Button  w="100%"
                             onPress={handleSignUp}>
                             <Text>Register</Text>
                         </Button>
-                        <br />
+                         <Text>{"\n"}</Text>
                         <Text onPress={forgotPassword}>Forgot Password</Text>
                     </Center>
                 </VStack>

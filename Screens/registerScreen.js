@@ -67,45 +67,48 @@ const registerScreen = () => {
         //Input fields &  Buttons
         <NativeBaseProvider>
             <KeyboardAvoidingView>
-
                 <VStack space={4} alignItems="center">
                     <Center mx="auto" w="80%" px="45" py="50" >
                         <Input
+                            w="100%"
                             placeholder="First Name"
                             value={fName}
                             onChangeText={text => setFName(text)}>
                         </Input>
-                        <br />
+                        <Text>{"\n"}</Text>
                         <Input
+                            w="100%"
                             placeholder="Surname"
                             value={sName}
                             onChangeText={text => setSName(text)}>
                         </Input>
-                        <br/>
+                        <Text>{"\n"}</Text>
                         <Input
+                            w="100%"
                             placeholder="Email"
                             value={email}
                             onChangeText={text => setEmail(text)}>
                         </Input>
-                        <br />
+                        <Text>{"\n"}</Text>
                         <Input
+                            w="100%"
                             placeholder="Password"
                             value={password}
                             onChangeText={text => setPassword(text)}
                             secureTextEntry>
                         </Input>
-                        <br/><br/>
-                            <Button
-                                w="100%"
-                                onPress={handleSignUp}>
-                                <Text>Register</Text>
-                            </Button>
-                            <br/>
-                            <Button
-                              w="100%"
-                                onPress={backToLogin}>
-                                <Text>Back to Login</Text>
-                            </Button>
+                        <Text>{"\n"}</Text>
+                        <Button
+                            w="100%"
+                            onPress={handleSignUp}>
+                            <Text>Register</Text>
+                        </Button>
+                        <Text>{"\n"}</Text>
+                        <Button
+                            w="100%"
+                            onPress={backToLogin}>
+                            <Text>Back to Login</Text>
+                        </Button>
                     </Center>
                 </VStack>
             </KeyboardAvoidingView>

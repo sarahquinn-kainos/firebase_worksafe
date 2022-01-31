@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, VStack, HStack, Center, NativeBaseProvider, Text, Button, FormControl, Input, Select, TextField, Card, Spacer } from "native-base"
+import { ScrollView, Flex, VStack, HStack, Center, NativeBaseProvider, Text, Spacer, Button, FormControl, Input, Divider } from "native-base"
 import { addSubCollectionToExistingDocumentById, getUserSubCollectionDocById } from '../Javascript/firestore'
 import { auth } from '../firebase'
 import { useForm, Controller } from "react-hook-form";
@@ -80,10 +80,10 @@ const PageData = () => {
             <Center>
                 <FormControl>
                     <VStack margin={"10"}>
-                        <br />
-                        <Center><Text bold color={"black"}>Update Contact Information</Text></Center>
-                        <br />
-                        <FormControl.Label>Phone Number</FormControl.Label>
+                        <Divider />
+                        <Text>{"\n"}</Text>
+                        <Center><Text fontSize="lg" bold color={"black"}>Update Contact Information</Text></Center>
+                        <Text>{"\n"}</Text>
                         {/* User Phone */}
                         <Controller
                             control={control}
@@ -102,14 +102,19 @@ const PageData = () => {
                             name="userPrimaryPhone"
                         />
                         {
-                            errors.userPrimaryPhone?.type === 'validate' && <Text>Must be a valid UK Phone Number.</Text> ||
-                            errors.userPrimaryPhone?.type === 'required' && <Text>Field is Required.</Text>
+                            errors.userPrimaryPhone?.type === 'validate' ?
+                                <Text>Must be a valid UK Phone Number.</Text> :
+                                null
+                                    ||
+                                    errors.userPrimaryPhone?.type === 'required' ?
+                                    <Text>Field is Required.</Text> :
+                                    null
                         }
-                        <FormControl.HelperText>Must include country code (e.g +4475123...)</FormControl.HelperText>
+                        <FormControl.HelperText><Text>Must include country code (e.g +4475123...)</Text></FormControl.HelperText>
 
-                        <br /><br />
+                        <Text>{"\n"}</Text>
                         <Center><Text bold color={"black"}>Primary Emergency Contact Information</Text></Center>
-                        <br />
+                        <Text>{"\n"}</Text>
                         {/* Primary Contact Name */}
                         <Controller
                             control={control}
@@ -127,9 +132,9 @@ const PageData = () => {
                             name="emergencyContact1Name"
                         />
                         {
-                            errors.emergencyContact1Name?.type === 'required' && <Text>Field is Required.</Text>
+                            errors.emergencyContact1Name?.type === 'required' ? <Text>Field is Required.</Text> : null
                         }
-                        <br />
+                        <Text>{"\n"}</Text>
                         {/* Primary Contact Relationship */}
                         <Controller
                             control={control}
@@ -146,11 +151,11 @@ const PageData = () => {
                             )}
                             name="emergencyContact1Relationship"
                         />
-                        <FormControl.HelperText>Mother, Father, Sibling, Partner, etc.</FormControl.HelperText>
+                        <FormControl.HelperText><Text>Mother, Father, Sibling, Partner, etc.</Text></FormControl.HelperText>
                         {
-                            errors.emergencyContact1Relationship?.type === 'required' && <Text>Field is Required.</Text>
+                            errors.emergencyContact1Relationship?.type === 'required' ? <Text>Field is Required.</Text> : null
                         }
-                        <br />
+                        <Text>{"\n"}</Text>
                         {/* Primary Contact Phone */}
                         <Controller
                             control={control}
@@ -169,75 +174,68 @@ const PageData = () => {
                             name="emergencyContact1Phone"
                         />
                         {
-                            errors.emergencyContact1Phone?.type === 'validate' && <Text>Must be a valid UK Phone Number.</Text> ||
-                            errors.emergencyContact1Phone?.type === 'required' && <Text>Field is Required.</Text>
+                            errors.userPrimaryPhone?.type === 'validate' ?
+                                <Text>Must be a valid UK Phone Number.</Text> :
+                                null
+                                    ||
+                                    errors.userPrimaryPhone?.type === 'required' ?
+                                    <Text>Field is Required.</Text> :
+                                    null
                         }
-                        <br />
-                        <HStack>
-                        </HStack>
+                        <FormControl.HelperText><Text>Must include country code (e.g +4475123...)</Text></FormControl.HelperText>
+                        <Text>{"\n"}</Text>
+                        <Button onPress={handleSubmit(saveFormData)}>
+                            <Text bold color={"white"}>Save</Text>
+                        </Button>
                     </VStack>
                 </FormControl>
-                <br></br>
-                <Center>
-                    <Button onPress={handleSubmit(saveFormData)}>
-                        <Text bold color={"white"}>Save</Text>
-                    </Button>
-                </Center>
             </Center>
         )
     }
 
     const CurrentContactInfo = () => {
 
-        const EmergencyContacts = () => {
-            return (
+        return (
+            <Center>
                 <VStack mt="4">
-                    <Text bold>Emergency Contact Information</Text>
+                    <Text fontSize="lg" bold>Personal Contact Information</Text>
+                    <HStack>
+                        <Text>Phone Number:  </Text>
+                        <Text>{currentContactDoc?.personal_phone ?
+                            currentContactDoc.personal_phone :
+                            null}</Text>
+                    </HStack>
+                    <Text>{"\n"}</Text>
+                    <Text fontSize="lg" bold>Emergency Contact Information</Text>
                     <VStack>
                         <HStack pt="1">
                             <Text >Phone Number:  </Text>
-                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
-                                currentContactDoc.emergencyContacts.contactInfo.full_name}</Text>
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo ?
+                                currentContactDoc.emergencyContacts.contactInfo.full_name :
+                                null}</Text>
                         </HStack>
                     </VStack>
                     <VStack>
                         <HStack pt="1">
                             <Text >Relationship:  </Text>
-                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
-                                currentContactDoc.emergencyContacts.contactInfo.relationship}</Text>
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo ?
+                                currentContactDoc.emergencyContacts.contactInfo.relationship :
+                                null}</Text>
                         </HStack>
                     </VStack>
                     <VStack>
                         <HStack pt="1">
                             <Text >Name:  </Text>
-                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo &&
-                                currentContactDoc.emergencyContacts.contactInfo.phone}</Text>
+                            <Text>{currentContactDoc?.emergencyContacts?.contactInfo ?
+                                currentContactDoc.emergencyContacts.contactInfo.phone :
+                                null}</Text>
                         </HStack>
                     </VStack>
                 </VStack>
-            )
-        }
-
-
-        return (
-
-            <Center>
-                <Card mt="5">
-                    <VStack>
-                        <Text bold>Personal Contact Information</Text>
-                        <HStack>
-                            <Text>Phone Number:  </Text>
-                            <br /><br />
-                            <Text>{currentContactDoc?.personal_phone &&
-                                currentContactDoc.personal_phone}</Text>
-                        </HStack>
-                    </VStack>
-                    <EmergencyContacts />
-                </Card>
             </Center>
         )
-
     }
+
     return (
         <Flex>
             <CurrentContactInfo />
@@ -252,7 +250,9 @@ const userContactInfoScreen = () => {
 
     return (
         <NativeBaseProvider>
-            <PageData />
+            <ScrollView>
+                <PageData />
+            </ScrollView>
         </NativeBaseProvider>
     )
 

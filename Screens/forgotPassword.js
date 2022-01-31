@@ -1,6 +1,6 @@
 import React, { useState, Component } from 'react';
 import { auth } from '../firebase'
-import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack } from "native-base"
+import { KeyboardAvoidingView, Center, NativeBaseProvider, Text, Button, Input, VStack, Flex } from "native-base"
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -20,20 +20,23 @@ const forgotPassword = () => {
 
         <NativeBaseProvider>
             <KeyboardAvoidingView>
-                <Center mx="auto" px="20" py="20">
-                    <VStack>
+                <VStack space={4} alignItems="center">
+                    <Center mx="auto" w="80%" px="45" py="50">
                         <Input
+                            w="100%"
                             placeholder="Email"
                             value={email}
                             onChangeText={text => setEmail(text)}>
                         </Input>
-                        <br/>
+                        <Text>{"\n"}</Text>
+                        <Text>{"\n"}</Text>
                         <Button
+                            w="100%"
                             onPress={sendResetPasswordEmail}>
                             <Text>Send Reset</Text>
                         </Button>
-                    </VStack>
-                </Center>
+                    </Center>
+                </VStack>
             </KeyboardAvoidingView>
         </NativeBaseProvider>
     );

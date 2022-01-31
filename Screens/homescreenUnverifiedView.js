@@ -22,9 +22,12 @@ const sendResetPasswordEmail = () => {
         alert("Email sent to " + email)
     )
         .catch(error => alert(error.message))
-    }
+}
 
 const showUnerifiedHome = () => {
+
+
+
     const user = auth.currentUser;
     const navigation = useNavigation();
     const [displayName, setdisplayName] = useState(user.displayName ? user.displayName : '');
@@ -38,24 +41,26 @@ const showUnerifiedHome = () => {
     return (
 
         <NativeBaseProvider>
-            <Center mt="15%">
-                <Text>Hello {displayName}!</Text>
-                <br></br>
-                <Text>Your email address has not been verified</Text>
-                <Text>Please check your inbox and spam folders.</Text>
-                <br />
-                <Center>
+
+            <VStack space={4} alignItems="center">
+                <Center mx="auto" w="80%" px="45" py="50" >
+                    <Text>Hello {displayName}!</Text>
+                    <Text>{"\n"}</Text>
+                    <Text>Your email address has not been verified</Text>
+                    <Text>Please check your inbox and spam folders.</Text>
+                    <Text>{"\n"}</Text>
                     <Button minW={"100%"}
                         onPress={sendResetPasswordEmail}>
                         <Text bold color="white">Re-send Verification Email</Text>
                     </Button>
-                    <br />
+                    <Text>{"\n"}</Text>
                     <Button minW={"100%"}
-                        onPress={()=>{navigation.navigate('AccountManage')}}>
+                        onPress={() => { navigation.navigate('AccountManage') }}>
                         <Text bold color="white">Manage My Profile</Text>
                     </Button>
+                    <Text>{"\n"}</Text>
                 </Center>
-            </Center>
+            </VStack>
         </NativeBaseProvider>
     )
 
