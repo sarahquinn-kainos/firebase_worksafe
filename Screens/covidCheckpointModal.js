@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, Flex, VStack, HStack, Center, NativeBaseProvider, Text, Spacer, Button, FormControl, Input, Divider, Modal, Radio } from "native-base"
-import { addSubCollectionToExistingDocumentById } from '../Javascript/firestore'
+import { addSubCollectionToExistingDocumentById, getCovidDataForUserLastSevenDays } from '../Javascript/firestore'
 import { auth } from '../firebase'
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/core'
@@ -25,18 +25,23 @@ const CheckpointForm = () => {
     // START Firestore FUNCTION 
     const saveFormData = data => {
         var stamp = new Date().toISOString();
+        const booleanValue = new Map([
+            ["1", true],
+            ["0", false]
+          ]);
         var formDataJSON = {
             "timestamp": stamp,
-            "diagnosed": data.diagnosed,
-            "close_contact": data.close_contact,
-            "symptoms": data.symptoms,
-            "travelled": data.travelled,
-            "self_isolating": data.self_isolating
+            "diagnosed": booleanValue.get(data.diagnosed),
+            "close_contact": booleanValue.get(data.close_contact),
+            "symptoms": booleanValue.get(data.symptoms),
+            "travelled": booleanValue.get(data.travelled),
+            "self_isolating": booleanValue.get(data.self_isolating)
         }
 
         try {
             console.log('try')
             addSubCollectionToExistingDocumentById('Users', 'CovidStatus', user.uid ,null, formDataJSON);
+            //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
         }
         catch {
             (err) => {

@@ -20,6 +20,41 @@ async function getSingleDocByDocId(documentID){
     return result;
 }
 
+async function getCovidDataForUserLastSevenDays(id){
+    var result;
+
+    var end = new Date().toISOString();
+    var start = new Date();
+    start.setDate(start.getDate()-7);
+    start = start.toISOString();
+    console.log(start, end)
+
+    // mapping for firestore object - returns a promise of multiple docs 
+    const collectIdsAndDocs = (doc) => {
+        return { id: doc.id, ...doc.data() };
+    };
+
+    if (id) {
+        // get data from firestore with a snapshot 
+        const getUserDocument = async () => {
+            const snapshot = await firestore
+                .collection('Users').doc(id)
+                .collection('CovidStatus')
+                .where('timestamp', '>=', start)
+                .where('timestamp', '<=', end)
+                .get()
+                console.log(snapshot)
+            const myDocs = snapshot.docs.map(collectIdsAndDocs);
+            return (myDocs)
+        }
+        result = await getUserDocument().then(function (response) {
+            return response;
+        })
+    }
+    console.log(result)
+    return result;
+}
+
 async function getUserSubCollectionDocById(subCollection, id){
     const user = auth.currentUser;
     var result;
@@ -105,4 +140,4 @@ function addSubCollectionToExistingDocumentById(collection, subCollection, id, s
 
 } 
 
-export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById, getUserSubCollectionDocById}
+export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById, getUserSubCollectionDocById, getCovidDataForUserLastSevenDays}
