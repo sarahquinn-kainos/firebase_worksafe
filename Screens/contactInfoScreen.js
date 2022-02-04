@@ -48,7 +48,6 @@ const PageData = () => {
 
         // START Firestore FUNCTION 
         const saveFormData = data => {
-            //const user = auth.currentUser;
             var formDataJSON = {
                 "personal_phone": data.userPrimaryPhone,
                 "emergencyContacts": {
@@ -209,7 +208,7 @@ const PageData = () => {
                     <Text fontSize="lg" bold>Emergency Contact Information</Text>
                     <VStack>
                         <HStack pt="1">
-                            <Text >Phone Number:  </Text>
+                            <Text >Name:  </Text>
                             <Text>{currentContactDoc?.emergencyContacts?.contactInfo ?
                                 currentContactDoc.emergencyContacts.contactInfo.full_name :
                                 null}</Text>
@@ -225,7 +224,7 @@ const PageData = () => {
                     </VStack>
                     <VStack>
                         <HStack pt="1">
-                            <Text >Name:  </Text>
+                            <Text >Phone Number:  </Text>
                             <Text>{currentContactDoc?.emergencyContacts?.contactInfo ?
                                 currentContactDoc.emergencyContacts.contactInfo.phone :
                                 null}</Text>
