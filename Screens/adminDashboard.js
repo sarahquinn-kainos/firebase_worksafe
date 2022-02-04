@@ -1,7 +1,7 @@
 import React from 'react'
 import { auth } from '../firebase'
 import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native'
-import { NativeBaseProvider, Button, Text } from "native-base";
+import { NativeBaseProvider, Button, Text, Center } from "native-base";
 
 const adminDashboard = () => {
 
@@ -13,11 +13,12 @@ const adminDashboard = () => {
         const displayName = user.displayName
 
         return (
-                <NativeBaseProvider>
-                    <Text>TEST</Text>
-                    <Button onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                    </Button>
-                </NativeBaseProvider>
+            <NativeBaseProvider>
+                <Center>
+                    <Text>{displayName}</Text>
+                    <Text>{email}</Text>
+                </Center>
+            </NativeBaseProvider>
         )
     }
 
