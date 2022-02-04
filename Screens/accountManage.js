@@ -14,7 +14,7 @@ export function AccountOptions() {
         auth.signOut().then(() => {
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Login' }],
+                routes: [{ name: 'StackNav' }],
             });
             alert("You have signed out.")
             console.log('signed out successfully')
@@ -69,7 +69,7 @@ export function AccountOptions() {
                 <Button variant="ghost" onPress={() => setShowLogoutModal(true)}><Text bold color="white">Logout</Text></Button>
             </Center>
             <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost" onPress={() => navigation.replace("CovidCheckpoint")}><Text bold color="white">DEV TEST Covid Checkpoint Form</Text></Button>
+                <Button variant="ghost" onPress={() => navigation.navigate("CovidCheckpoint")}><Text bold color="white">DEV TEST Covid Checkpoint Form</Text></Button>
             </Center>
             <LogoutModal />
         </VStack>

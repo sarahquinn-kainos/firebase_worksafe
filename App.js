@@ -31,8 +31,8 @@ function StackNav() {
     <Stack.Screen name="AccountManage" component={accountManageScreen} options={{ headerTitle: "My Account", headerTitleAlign: 'center' }} />
     <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ headerTitle: "Forgot My Password", headerTitleAlign: 'center' }} />
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
-    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} options={{ headerTitle: "My Contact Info", headerTitleAlign: 'center' }} />
-    <Stack.Screen name="DrawerNav" component={DrawerNav} options={{ headerShown: false }} />
+    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen}/>
+    {/* <Stack.Screen name="DrawerNav" component={DrawerNav} options={{ headerShown: false }} /> */}
   </Stack.Navigator>
   );
 }
@@ -46,9 +46,9 @@ function DrawerNav() {
                 drawerIcon: () => null,
 
             }}/>
-      <Stack.Screen name="AdminDash" component={adminDashboard}/>
-      <Drawer.Screen name="CovidCheckpoint" component={covidCheckPointModal} />
-      <Drawer.Screen name="UserContactInfo" component={userContactInfoScreen} />
+      <Stack.Screen name="Home" component={adminDashboard}/>
+      <Stack.Screen name="Manage Account" component={accountManageScreen}/>
+      <Drawer.Screen name="COVID Checkpoint" component={covidCheckPointModal} />
     </Drawer.Navigator>
   );
 }
@@ -58,7 +58,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <DrawerNav/>
+        <StackNav/>
       </NavigationContainer>
     </NativeBaseProvider>
   );
