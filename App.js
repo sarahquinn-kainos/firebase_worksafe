@@ -39,7 +39,13 @@ function StackNav() {
 function DrawerNav() {
   return (
     <Drawer.Navigator initialRouteName='Main'>
-      <Drawer.Screen name="StackNav" component={StackNav} />
+      <Drawer.Screen name="StackNav" component={StackNav} options={{
+                drawerItemStyle: { height: 0 },
+                drawerLabel: () => null,
+                title: null,
+                drawerIcon: () => null,
+
+            }}/>
       <Stack.Screen name="AdminDash" component={adminDashboard}/>
       <Drawer.Screen name="CovidCheckpoint" component={covidCheckPointModal} />
       <Drawer.Screen name="UserContactInfo" component={userContactInfoScreen} />
