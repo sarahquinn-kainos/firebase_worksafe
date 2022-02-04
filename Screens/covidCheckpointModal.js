@@ -39,7 +39,6 @@ const CheckpointForm = () => {
         }
 
         try {
-            console.log('try')
             addSubCollectionToExistingDocumentById('Users', 'CovidStatus', user.uid ,null, formDataJSON);
             //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
         }
