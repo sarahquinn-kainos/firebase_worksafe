@@ -3,21 +3,9 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { auth } from '../firebase'
 import { firestore } from '../firebase'
 import { getSingleDocByDocId, getUsersCollection } from '../Javascript/firestore'
+import screenWithDrawerNav from '../components/drawerNav'
 
-
-
-// class User extends Component {
-//     constructor() {
-//         super();
-//         this.state = {
-//             currentUserDoc: {}
-//         }
-//     }
-// }
-
-
-
-const showVerifiedHome = () => {
+const showVerifiedHomeScreenContent = () => {
     const [currentUserDoc, setCurrentUserDoc] = useState(null);
     const [email, setEmail] = useState('');
     const user = auth.currentUser;
@@ -44,4 +32,9 @@ const showVerifiedHome = () => {
     )
 
 }
+
+const showVerifiedHome = () => {
+    return screenWithDrawerNav(showVerifiedHomeScreenContent)
+}
+
 export default showVerifiedHome

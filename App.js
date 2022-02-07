@@ -25,31 +25,15 @@ function StackNav() {
   return (
     <Stack.Navigator>
     <Stack.Screen name="Login" component={loginScreen} options={{ headerTitle: "WorkSafe Login", headerTitleAlign: 'center' }} />
-    <Stack.Screen name="Home" component={homeScreen} options={{ headerTitle: "Home", headerTitleAlign: 'center' }} />
+    <Stack.Screen name="Home" component={homeScreen} options={{ headerShown: false }}  />
     <Stack.Screen name="Register" component={registerScreen} options={{ headerTitle: "Register a New Account", headerTitleAlign: 'center' }} />
     <Stack.Screen name="AdminDash" component={adminDashboard} options={{ headerShown: false }}  />
-    <Stack.Screen name="AccountManage" component={accountManageScreen} options={{ headerTitle: "My Account", headerTitleAlign: 'center' }} />
+    <Stack.Screen name="AccountManage" component={accountManageScreen} options={{ headerShown: false }}  />
     <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ headerTitle: "Forgot My Password", headerTitleAlign: 'center' }} />
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
-    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen}/>
+    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
     {/* <Stack.Screen name="DrawerNav" component={DrawerNav} options={{ headerShown: false }} /> */}
   </Stack.Navigator>
-  );
-}
-function DrawerNav() {
-  return (
-    <Drawer.Navigator initialRouteName='Main'>
-      <Drawer.Screen name="StackNav" component={StackNav} options={{
-                drawerItemStyle: { height: 0 },
-                drawerLabel: () => null,
-                title: null,
-                drawerIcon: () => null,
-
-            }}/>
-      <Stack.Screen name="Home" component={adminDashboard}/>
-      <Stack.Screen name="Manage Account" component={accountManageScreen}/>
-      <Drawer.Screen name="COVID Checkpoint" component={covidCheckPointModal} />
-    </Drawer.Navigator>
   );
 }
 

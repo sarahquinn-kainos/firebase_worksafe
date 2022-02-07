@@ -5,8 +5,9 @@ import { NativeBaseProvider, Button, Text, Center } from "native-base";
 import accountManageScreen from './accountManage';
 import covidCheckPointModal from './covidCheckpointModal';
 import { createDrawerNavigator, DrawerContentScrollView, } from "@react-navigation/drawer";
+import screenWithDrawerNav from '../components/drawerNav';
 
-const Drawer = createDrawerNavigator();
+//const Drawer = createDrawerNavigator();
 
 const adminHome = () => {
         // current user's account vlaues 
@@ -20,30 +21,15 @@ const adminHome = () => {
 
 }
 
-
-const DrawerNav = () => {
-    return (
-        <Drawer.Navigator >
-            <Drawer.Screen name="Home" component={adminHome} />
-            <Drawer.Screen name="Manage Account" component={accountManageScreen} />
-            <Drawer.Screen name="COVID Checkpoint" component={covidCheckPointModal} />
-        </Drawer.Navigator>
-    );
-}
-
 const adminDashboard = () => {
 
-    const navigation = useNavigation();
     const user = auth.currentUser;
     if (user) {
-    
-
-
 
         return (
             <NativeBaseProvider>
-                <DrawerNav />
-
+                {/* this function creates the screen we have defined above with a drawer navigation. */}
+                {screenWithDrawerNav(adminHome, true)}
             </NativeBaseProvider>
         )
     }
