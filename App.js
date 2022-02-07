@@ -13,6 +13,7 @@ import covidCheckPointModal from './Screens/covidCheckpointModal';
 import showVerifiedHome from './Screens/homescreenVerifiedView';
 import showUnerifiedHome from './Screens/homescreenUnverifiedView';
 import { NativeBaseProvider} from "native-base";
+import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration"
 
 
 const Stack = createNativeStackNavigator();
@@ -47,3 +48,6 @@ export default function App() {
     </NativeBaseProvider>
   );
 }
+
+serviceWorkerRegistration.register();
+
