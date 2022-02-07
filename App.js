@@ -10,6 +10,8 @@ import forgotPassword from './Screens/forgotPassword';
 import accountManageScreen from './Screens/accountManage';
 import userContactInfoScreen from './Screens/contactInfoScreen';
 import covidCheckPointModal from './Screens/covidCheckpointModal';
+import showVerifiedHome from './Screens/homescreenVerifiedView';
+import showUnerifiedHome from './Screens/homescreenUnverifiedView';
 import { NativeBaseProvider} from "native-base";
 
 
@@ -25,9 +27,11 @@ function StackNav() {
     <Stack.Screen name="Home" component={homeScreen} options={{ headerShown: false }}  />
     <Stack.Screen name="Register" component={registerScreen} options={{ headerTitle: "Register a New Account", headerTitleAlign: 'center' }} />
     <Stack.Screen name="AdminDash" component={adminDashboard} options={{ headerShown: false }}  />
-    <Stack.Screen name="AccountManage" component={accountManageScreen} options={{ headerShown: false }}  />
+    <Stack.Screen name="AccountManage" component={accountManageScreen}/>
     <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ headerTitle: "Forgot My Password", headerTitleAlign: 'center' }} />
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
+    <Stack.Screen name="VerifiedHome" component={showVerifiedHome} options={{ headerShown: false }} />
+    <Stack.Screen name="UnverifiedHome" component={showUnerifiedHome} options={{ headerShown: false }} />
     <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
   </Stack.Navigator>
   );
