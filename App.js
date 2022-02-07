@@ -1,6 +1,6 @@
 import React from 'react';
 import 'react-native-gesture-handler';
-import { NavigationContainer, DefaultTheme, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import loginScreen from './Screens/loginScreen';
 import homeScreen from './Screens/homeScreen';
@@ -10,13 +10,10 @@ import forgotPassword from './Screens/forgotPassword';
 import accountManageScreen from './Screens/accountManage';
 import userContactInfoScreen from './Screens/contactInfoScreen';
 import covidCheckPointModal from './Screens/covidCheckpointModal';
-import { createDrawerNavigator, DrawerContentScrollView, } from "@react-navigation/drawer";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { NativeBaseProvider, Button, Box, HamburgerIcon, Pressable, Heading, VStack, Text, Center, HStack, Divider, Icon } from "native-base";
+import { NativeBaseProvider} from "native-base";
 
 
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
 
 const navTheme = DefaultTheme;
 navTheme.colors.background = 'white';
@@ -32,7 +29,6 @@ function StackNav() {
     <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ headerTitle: "Forgot My Password", headerTitleAlign: 'center' }} />
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
     <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
-    {/* <Stack.Screen name="DrawerNav" component={DrawerNav} options={{ headerShown: false }} /> */}
   </Stack.Navigator>
   );
 }

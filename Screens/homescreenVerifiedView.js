@@ -14,12 +14,7 @@ const showVerifiedHomeScreenContent = () => {
         getSingleDocByDocId(user.uid).then(result => {
             setCurrentUserDoc(result);
             setEmail(result.email)}
-            // setCurrentUserDoc(result)}
         );
-
-        //var currentUserDocJSON = JSON.parse(currentUserDoc);
-        //console.log()
-        //var myemail = currentUserDoc.email;
     }
     console.log(currentUserDoc)
     return (

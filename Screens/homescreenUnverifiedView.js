@@ -1,18 +1,7 @@
-import React, { useState, useEffect, setState, state } from 'react'
+import React, { useState, useEffect} from 'react'
 import { auth } from '../firebase'
-import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core'
-import {
-    Box,
-    Heading,
-    AspectRatio,
-    Image,
-    Text,
-    Center,
-    HStack,
-    Stack,
-    NativeBaseProvider, VStack, Button, IconButton, Icon, StatusBar
-} from "native-base"
+import { Text, Center, NativeBaseProvider, VStack, Button } from "native-base"
 
 
 const sendResetPasswordEmail = () => {
