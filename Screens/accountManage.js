@@ -12,9 +12,10 @@ export function AccountOptions() {
 
     const firebaseLogout = () => {
         auth.signOut().then(() => {
+            console.log(navigation.getState())
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'StackNav' }],
+                routes: [{ name: 'Login' }],
             });
             alert("You have signed out.")
             console.log('signed out successfully')

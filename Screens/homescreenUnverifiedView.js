@@ -45,7 +45,7 @@ const showUnerifiedHome = () => {
                     <Text>{"\n"}</Text>
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('AccountManage') }}>
-                        <Text bold color="white">Manage My Profile</Text>
+                        <Text bold color="white">DEV TEST Manage My Profile</Text>
                     </Button>
                     <Text>{"\n"}</Text>
                 </Center>
