@@ -2,6 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { auth } from '../firebase'
 import accountManageScreen from "../Screens/accountManage";
 import covidCheckPointModal from "../Screens/covidCheckpointModal";
+import shiftManageScreen from "../Screens/adminScreens/scheduleShift";
 
 
 const Drawer = createDrawerNavigator();
@@ -11,6 +12,7 @@ function screenWithDrawerNav(defaultFirstScreen, isAdmin) {
         return (
             <Drawer.Navigator initialRouteName='Main'>
                 <Drawer.Screen name="Home" component={defaultFirstScreen} />
+                <Drawer.Screen name="Manage Schedule" component={shiftManageScreen} />
                 <Drawer.Screen name="Manage Account" component={accountManageScreen} />
                 <Drawer.Screen name="COVID Checkpoint" component={covidCheckPointModal} />
             </Drawer.Navigator>

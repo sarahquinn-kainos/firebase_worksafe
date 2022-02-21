@@ -99,20 +99,40 @@ async function getUsersCollection(){
 }
 
 
-function writeDocumentToCollection(collection, uid, document) {
-    //const [ thisDoc, setThisDoc ] = useState(document);
-    const ref = firestore.collection(collection);
-    
-    async function addDocument() {
-      await ref.doc(uid).set(document).then(
-          console.log("Document Pushed to Collection: " + collection)
-      ).catch((err) => {
-            console.error(err);
-          }
-      );
+function writeDocumentToCollection(collection, id, document) {
+    // to identify docs with ID collection 
+    if (id){
+        //const [ thisDoc, setThisDoc ] = useState(document);
+        const ref = firestore.collection(collection);
+        
+        async function addDocument() {
+        await ref.doc(id).set(document).then(
+            console.log("Document Pushed to Collection: " + collection)
+        ).catch((err) => {
+                console.error(err);
+            }
+        );
+        }
+        addDocument();
     }
-    addDocument();
+    else{
+        //const [ thisDoc, setThisDoc ] = useState(document);
+        const ref = firestore.collection(collection);
+        
+        async function addDocument() {
+        await ref.doc().set(document).then(
+            console.log("Document Pushed to Collection: " + collection)
+        ).catch((err) => {
+                console.error(err);
+            }
+        );
+        }
+        addDocument();
+    }
+    
   }
+
+
 
 function addSubCollectionToExistingDocumentById(collection, subCollection, id, subId, documentData){
     const ref = firestore.collection(collection);
