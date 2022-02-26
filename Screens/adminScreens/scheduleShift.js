@@ -4,10 +4,12 @@ import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, 
 import { useNavigation } from '@react-navigation/core'
 import firebase from 'firebase';
 import { writeDocumentToCollection } from '../../Javascript/firestore';
+import viewSchedule from './viewSchedule';
 
 
 export function ShiftScheduleOptions() {
 
+    const navigation = useNavigation();
     // const navigation = useNavigation();
     // const user = auth.currentUser;
 
@@ -48,9 +50,9 @@ export function ShiftScheduleOptions() {
 
     const submitNewShift = () => {
 
-        const shift_date = new Date('2022-02-16');
+        const shift_date = new Date('2022-03-01');
         const shift_start_time = new Date('2022-02-16T09:00:00Z');
-        const shift_end_time = new Date('2022-02-16T16:00:00Z');
+        const shift_end_time = new Date('2022-03-01T16:00:00Z');
         const worker_uid = 's5CaeMidYmhsQHZs4SP55KhIF453';
         const documentData = {
         "uid": worker_uid,
@@ -94,7 +96,7 @@ export function ShiftScheduleOptions() {
                 <Button variant="ghost" onPress={}><Text bold color="white">Edit Shift</Text></Button>
             </Center> */}
             <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost"><Text bold color="white">View Schedule</Text></Button>
+                <Button variant="ghost" onPress={() => { navigation.navigate('adminViewSchedule') }}><Text bold color="white">View Schedule</Text></Button>
             </Center>
         </VStack>
     )

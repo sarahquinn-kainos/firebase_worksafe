@@ -14,6 +14,7 @@ import showVerifiedHome from './Screens/homescreenVerifiedView';
 import showUnerifiedHome from './Screens/homescreenUnverifiedView';
 import { NativeBaseProvider} from "native-base";
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration"
+import viewSchedule from './Screens/adminScreens/viewSchedule';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ function StackNav() {
     <Stack.Screen name="VerifiedHome" component={showVerifiedHome} options={{ headerShown: false }} />
     <Stack.Screen name="UnverifiedHome" component={showUnerifiedHome} options={{ headerShown: false }} />
     <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
+    <Stack.Screen name="adminViewSchedule" component={viewSchedule} options={{ headerShown: false }} />
   </Stack.Navigator>
   );
 }

@@ -2,7 +2,7 @@ import { auth } from '../firebase'
 import { firestore } from '../firebase'
 
 
-async function getSingleDocByDocId(documentID){
+async function getSingleDocByDocId(documentID) {
     const user = auth.currentUser;
     var result;
     if (user) {
@@ -20,12 +20,12 @@ async function getSingleDocByDocId(documentID){
     return result;
 }
 
-async function getCovidDataForUserLastSevenDays(id){
+async function getCovidDataForUserLastSevenDays(id) {
     var result;
 
     var end = new Date().toISOString();
     var start = new Date();
-    start.setDate(start.getDate()-7);
+    start.setDate(start.getDate() - 7);
     start = start.toISOString();
     console.log(start, end)
 
@@ -43,7 +43,7 @@ async function getCovidDataForUserLastSevenDays(id){
                 .where('timestamp', '>=', start)
                 .where('timestamp', '<=', end)
                 .get()
-                console.log(snapshot)
+            console.log(snapshot)
             const myDocs = snapshot.docs.map(collectIdsAndDocs);
             return (myDocs)
         }
@@ -55,7 +55,38 @@ async function getCovidDataForUserLastSevenDays(id){
     return result;
 }
 
-async function getUserSubCollectionDocById(subCollection, id){
+async function getShiftDataBetweenDates(start, end) {
+    var result;
+
+    // mapping for firestore object - returns a promise of multiple docs 
+    const collectIdsAndDocs = (doc) => {
+        return { id: doc.id, ...doc.data() };
+    };
+
+    // The Firestore documentation mentions in its “Query limitations” section:
+    // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
+    // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
+
+    if (start && end) {
+        // get data from firestore with a snapshot between dates input by user
+        const getUserDocument = async () => {
+            const snapshot = await firestore
+                .collection('WorkshiftSchedules')
+                .where('date', '>=', start)
+                .where('date', '<=', end)
+                .get();
+            console.log(snapshot)
+            var myDocs = snapshot.docs.map(collectIdsAndDocs);
+            return (myDocs)
+        }
+        result = await getUserDocument().then(function (response) {
+            return response;
+        })
+    }
+    return result;
+}
+
+async function getUserSubCollectionDocById(subCollection, id) {
     const user = auth.currentUser;
     var result;
     if (user) {
@@ -74,7 +105,7 @@ async function getUserSubCollectionDocById(subCollection, id){
 }
 
 
-async function getUsersCollection(){
+async function getUsersCollection() {
     const user = auth.currentUser;
     var result;
 
@@ -88,7 +119,7 @@ async function getUsersCollection(){
         const getUserDocument = async () => {
             const snapshot = await firestore
                 .collection('Users').get();
-                const myDocs = snapshot.docs.map(collectIdsAndDocs);
+            const myDocs = snapshot.docs.map(collectIdsAndDocs);
             return (myDocs)
         }
         result = await getUserDocument().then(function (response) {
@@ -101,63 +132,71 @@ async function getUsersCollection(){
 
 function writeDocumentToCollection(collection, id, document) {
     // to identify docs with ID collection 
-    if (id){
+    if (id) {
         //const [ thisDoc, setThisDoc ] = useState(document);
         const ref = firestore.collection(collection);
-        
+
         async function addDocument() {
-        await ref.doc(id).set(document).then(
-            console.log("Document Pushed to Collection: " + collection)
-        ).catch((err) => {
+            await ref.doc(id).set(document).then(
+                console.log("Document Pushed to Collection: " + collection)
+            ).catch((err) => {
                 console.error(err);
             }
-        );
+            );
         }
         addDocument();
     }
-    else{
+    else {
         //const [ thisDoc, setThisDoc ] = useState(document);
         const ref = firestore.collection(collection);
-        
+
         async function addDocument() {
-        await ref.doc().set(document).then(
-            console.log("Document Pushed to Collection: " + collection)
-        ).catch((err) => {
+            await ref.doc().set(document).then(
+                console.log("Document Pushed to Collection: " + collection)
+            ).catch((err) => {
                 console.error(err);
             }
-        );
+            );
         }
         addDocument();
     }
-    
-  }
+
+}
 
 
 
-function addSubCollectionToExistingDocumentById(collection, subCollection, id, subId, documentData){
+function addSubCollectionToExistingDocumentById(collection, subCollection, id, subId, documentData) {
     const ref = firestore.collection(collection);
-    
+
     async function addSubCollecionToDoc() {
-        if(subId){
+        if (subId) {
             await ref.doc(id).collection(subCollection).doc(subId).set(documentData)
-            .then(()=>{
-                console.log("Sub-Collection has been added to Firestore. [Collection: "+ collection + ", Document ID:" + id + "]")
-            }).catch((err) => {
-                console.error(err);
-              } );
-        }else{
+                .then(() => {
+                    console.log("Sub-Collection has been added to Firestore. [Collection: " + collection + ", Document ID:" + id + "]")
+                }).catch((err) => {
+                    console.error(err);
+                });
+        } else {
             await ref.doc(id).collection(subCollection).doc().set(documentData)
-            .then(()=>{
-                console.log("Sub-Collection has been added to Firestore. [Collection: "+ collection )
-            }).catch((err) => {
-                console.error(err);
-              } );
+                .then(() => {
+                    console.log("Sub-Collection has been added to Firestore. [Collection: " + collection)
+                }).catch((err) => {
+                    console.error(err);
+                });
         }
-      
-     
+
+
     }
     addSubCollecionToDoc();
 
-} 
+}
 
-export {getSingleDocByDocId, getUsersCollection, writeDocumentToCollection, addSubCollectionToExistingDocumentById, getUserSubCollectionDocById, getCovidDataForUserLastSevenDays}
+export {
+    getSingleDocByDocId,
+    getUsersCollection,
+    writeDocumentToCollection,
+    addSubCollectionToExistingDocumentById,
+    getUserSubCollectionDocById,
+    getCovidDataForUserLastSevenDays,
+    getShiftDataBetweenDates
+}
