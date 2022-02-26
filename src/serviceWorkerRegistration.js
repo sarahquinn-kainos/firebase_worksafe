@@ -8,6 +8,7 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
+import firebase from "firebase";
 
 const isLocalhost = Boolean(
     window.location.hostname === "localhost" ||
@@ -49,6 +50,7 @@ const isLocalhost = Boolean(
         } else {
           // Is not localhost. Just register service worker
           registerValidSW(swUrl, config);
+          fcmRegister();
         }
       });
     }
@@ -133,6 +135,23 @@ const isLocalhost = Boolean(
       navigator.serviceWorker.ready
         .then((registration) => {
           registration.unregister();
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
+    }
+  }
+
+// use existing service worker for FCM notifications 
+  export function fcmRegister() {
+    const fcm = firebase.messaging()
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready
+        .then(async (registration) => {
+            await fcm.getToken({
+                vapidKey: "BAzh7ng33f6yBUMmCZIoDsW2SalS1aq0k0dMECSSxebw3c-Q4XUpVT2VH6YPYizeAROwiE0oLQ37ZrXefY6wXvQ",
+                serviceWorkerRegistration: registration,
+              });
         })
         .catch((error) => {
           console.error(error.message);
