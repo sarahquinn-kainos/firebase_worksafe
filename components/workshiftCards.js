@@ -36,6 +36,7 @@ function workshiftCardsAdminView() {
                                 var date = d.date.toDate().toLocaleDateString();
                                 var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
                                 var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
+                                var staff = d.uid
                                 return (
                                     <Card id={index} style={{width:300}}>
                                         <Center>
@@ -50,6 +51,10 @@ function workshiftCardsAdminView() {
                                                 <HStack pt="1">
                                                     <Text >End:  </Text>
                                                     <Text> {endTime}</Text>
+                                                </HStack>
+                                                <HStack pt="1">
+                                                    <Text >Staff:  </Text>
+                                                    <Text> {staff}</Text>
                                                 </HStack>
                                             </VStack>
                                         </Center>
