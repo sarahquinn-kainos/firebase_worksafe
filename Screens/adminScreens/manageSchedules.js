@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
-import { auth } from '../../firebase'
 import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input } from "native-base"
 import { useNavigation } from '@react-navigation/core'
-import firebase from 'firebase';
-import { writeDocumentToCollection } from '../../Javascript/firestore';
-
 
 export function ScheduleManageOptions() {
 

@@ -5,48 +5,13 @@ import { useNavigation } from '@react-navigation/core'
 import firebase from 'firebase';
 import { writeDocumentToCollection } from '../../Javascript/firestore';
 import viewSchedule from './viewSchedule';
+import dateTimePicker from '../../components/datePicker';
 
 
 export function ShiftScheduleOptions() {
 
     const navigation = useNavigation();
-    // const navigation = useNavigation();
-    // const user = auth.currentUser;
-
-    // const { control, handleSubmit, reset, formState: { errors } } = useForm({
-    //     defaultValues: {
-    //         "uid": "",
-    //         "date": "",
-    //         "start_datetime": "",
-    //         "end_datetime": ""
-    //     }
-    // });
-
-    // // START Firestore FUNCTION 
-    // const saveFormData = data => {
-    //     //date format for inputs is : Date().toISOString();
-    //     // need to use react native datepicker: "expo install @react-native-community/datetimepicker"
-    //     var formDataJSON = {
-    //         "uid": "",
-    //         "date": "",
-    //         "start_time": "",
-    //         "end_time": ""
-    //     }
-
-    //     try {
-    //         //add doc to firebase collection WorkshiftSchedules('Users', 'CovidStatus', user.uid ,null, formDataJSON);
-    //         //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
-    //     }
-    //     catch {
-    //         (err) => {
-    //             console.log(err)
-    //         }
-    //     } 
-    //     reset(); //reset form
-    //     //refresh/reset page similar to contact data form 
-    //     // alert/toast to indicate the shift is added to the schedule 
-    // }
-    // // END FUNCTION 
+    
 
     const submitNewShift = () => {
 
@@ -100,6 +65,7 @@ const shiftManageScreen = () => {
         <NativeBaseProvider>
             <Center flex={1} px="3">
                 <ShiftScheduleOptions/>
+                {dateTimePicker()}
             </Center>
         </NativeBaseProvider>
     )
