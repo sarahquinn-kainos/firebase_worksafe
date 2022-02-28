@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { auth } from '../../firebase'
 import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input } from "native-base"
 import { useNavigation } from '@react-navigation/core'
-import firebase from 'firebase';
 import { writeDocumentToCollection } from '../../Javascript/firestore';
-import viewSchedule from './viewSchedule';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import dateTimePicker from '../../components/datePicker';
 
 
@@ -58,6 +56,21 @@ export function ShiftScheduleOptions() {
     )
 }
 
+const useDateFromAsync = () => {
+    const getData = async () => {
+        try {
+            var data = await AsyncStorage.getItem('datePickerInput')
+            return data;
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    getData().then((data)=>{
+        console.log(data)
+        return data;
+    })
+}
+
 
 const shiftManageScreen = () => {
 
@@ -66,6 +79,7 @@ const shiftManageScreen = () => {
             <Center flex={1} px="3">
                 <ShiftScheduleOptions/>
                 {dateTimePicker()}
+                <Button onPress={useDateFromAsync}>TEST</Button>
             </Center>
         </NativeBaseProvider>
     )
