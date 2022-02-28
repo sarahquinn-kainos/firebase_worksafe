@@ -27,7 +27,6 @@ function workshiftCardsAdminView() {
 
     if (isAdmin) {
         return (
-            <NativeBaseProvider>
                 <Center>
                     <VStack mt="4">
 
@@ -65,7 +64,6 @@ function workshiftCardsAdminView() {
                             <Text>{"\n"}</Text>
                     </VStack>
                 </Center>
-            </NativeBaseProvider>
         );
     }
 }

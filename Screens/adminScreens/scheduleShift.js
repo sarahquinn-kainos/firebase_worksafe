@@ -87,17 +87,8 @@ export function ShiftScheduleOptions() {
     return (
         <VStack space={4} alignItems="center">
             <Heading textAlign="center" mb="10">
-                DEV TEST Shift Schedule 
+                Create new Shift
             </Heading>
-            <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost" onPress={submitNewShift}><Text bold color="white">Create New Shift</Text></Button>
-            </Center>
-            {/* <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost" onPress={}><Text bold color="white">Edit Shift</Text></Button>
-            </Center> */}
-            <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost" onPress={() => { navigation.navigate('adminViewSchedule') }}><Text bold color="white">View Schedule</Text></Button>
-            </Center>
         </VStack>
     )
 }
