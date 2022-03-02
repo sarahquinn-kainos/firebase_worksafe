@@ -4,13 +4,15 @@ import { useNavigation } from '@react-navigation/core'
 import { writeDocumentToCollection } from '../../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dateTimePicker from '../../components/datePicker';
+import userSelection from '../../components/userSelection';
 
 
 export function ShiftScheduleOptions() {
 
     const navigation = useNavigation();
-    
 
+    
+    
     const submitNewShift = () => {
 
         const shift_date = new Date('2022-03-01');
@@ -78,8 +80,12 @@ const shiftManageScreen = () => {
         <NativeBaseProvider>
             <Center flex={1} px="3">
                 <ShiftScheduleOptions/>
+                <Text>{"\n"}</Text>
                 {dateTimePicker()}
+                <Text>{"\n"}</Text>
                 <Button onPress={useDateFromAsync}>TEST</Button>
+                <Text>{"\n"}</Text>
+                {userSelection()}
             </Center>
         </NativeBaseProvider>
     )
