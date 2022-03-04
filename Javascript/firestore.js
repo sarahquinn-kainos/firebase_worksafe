@@ -3,7 +3,7 @@ import { firestore } from '../firebase'
 
 
 async function getSingleDocByDocId(documentID) {
-    const user = auth.currentUser;
+    const user = auth.currentUser; // user is signed into app 
     var result;
     if (user) {
         // get data from firestore with a snapshot 
@@ -19,6 +19,20 @@ async function getSingleDocByDocId(documentID) {
     }
     return result;
 }
+
+async function getUserDisplayName(documentID) {
+    const user = auth.currentUser;
+    var result;
+    if (user) {
+        result = await getSingleDocByDocId(documentID).then(function (response) {
+            return response
+        })
+    }
+    var full_name = result.first_name + " " + result.surname;
+    return full_name;
+}
+
+
 
 async function getCovidDataForUserLastSevenDays(id) {
     var result;
@@ -198,5 +212,6 @@ export {
     addSubCollectionToExistingDocumentById,
     getUserSubCollectionDocById,
     getCovidDataForUserLastSevenDays,
-    getShiftDataBetweenDates
+    getShiftDataBetweenDates,
+    getUserDisplayName
 }

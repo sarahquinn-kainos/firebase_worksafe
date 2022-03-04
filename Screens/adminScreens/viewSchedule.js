@@ -14,10 +14,6 @@ const ViewScheduleHome = () => {
     )
 }
 
-const inputDateRange = () => {
-    
-}
-
 const viewSchedule = () => {
 
     const user = auth.currentUser;

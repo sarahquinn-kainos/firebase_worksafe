@@ -5,6 +5,7 @@ import { writeDocumentToCollection } from '../../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dateTimePicker from '../../components/datePicker';
 import userSelection from '../../components/userSelection';
+import { getSelectedUsersFromAsync } from '../../Javascript/asyncStorageFunctions';
 
 
 export function ShiftScheduleOptions() {
@@ -18,9 +19,9 @@ export function ShiftScheduleOptions() {
         const shift_date = new Date('2022-03-01');
         const shift_start_time = new Date('2022-02-16T09:00:00Z');
         const shift_end_time = new Date('2022-03-01T16:00:00Z');
-        const worker_uid = 's5CaeMidYmhsQHZs4SP55KhIF453';
+        const worker_uids = ['s5CaeMidYmhsQHZs4SP55KhIF453'];
         const documentData = {
-        "uid": worker_uid,
+        "staff": worker_uids,
         "date": shift_date,
         "start_datetime": shift_start_time,
         "end_datetime": shift_end_time
@@ -58,22 +59,6 @@ export function ShiftScheduleOptions() {
     )
 }
 
-const useDateFromAsync = () => {
-    const getData = async () => {
-        try {
-            var data = await AsyncStorage.getItem('datePickerInput')
-            return data;
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    getData().then((data)=>{
-        console.log(data)
-        return data;
-    })
-}
-
-
 const shiftManageScreen = () => {
 
     return (
@@ -83,7 +68,7 @@ const shiftManageScreen = () => {
                 <Text>{"\n"}</Text>
                 {dateTimePicker()}
                 <Text>{"\n"}</Text>
-                <Button onPress={useDateFromAsync}>TEST</Button>
+                <Button onPress={getSelectedUsersFromAsync}>TEST</Button>
                 <Text>{"\n"}</Text>
                 {userSelection()}
             </Center>

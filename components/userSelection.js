@@ -37,6 +37,7 @@ function userSelection() {
             <Card style={{ width: 300 }}>
                 <ScrollView>
                     <Text>Selected: ({groupValue.length})</Text>
+                    <Text>{"\n"}</Text>
                     <VStack>
                     <Checkbox.Group onChange={setGroupValue} value={groupValue} accessibilityLabel="choose users">
                             {usersArr ?
