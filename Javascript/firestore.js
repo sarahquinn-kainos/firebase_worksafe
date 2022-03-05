@@ -1,5 +1,6 @@
 import { auth } from '../firebase'
 import { firestore } from '../firebase'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 async function getSingleDocByDocId(documentID) {
@@ -71,11 +72,32 @@ async function getCovidDataForUserLastSevenDays(id) {
 
 async function getShiftDataBetweenDates(start, end) {
     var result;
-
+    
     // mapping for firestore object - returns a promise of multiple docs 
     const collectIdsAndDocs = (doc) => {
         return { id: doc.id, ...doc.data() };
     };
+
+    async function mapNames(data) {
+        console.log(data)
+        data.forEach((doc) => {
+            console.log(doc) // valid document from snapshot 
+            var staff = doc.staff // get staff array from document 
+            console.log(staff) // valid array
+            var staff_names = new Array
+            // loping through each document in the retrieved snapshot - map each UID to a user's display name for UI 
+            staff.forEach((user) => {
+                getUserDisplayName(user).then((displayName) => {
+                    staff_names.push(displayName)
+                    console.log(staff_names) //valid array
+                    doc.staff = staff_names
+                })
+            })
+            console.log(doc)//valid object
+        })
+        console.log(data) // valid object 
+        return data
+    }
 
     // The Firestore documentation mentions in its “Query limitations” section:
     // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
@@ -83,7 +105,7 @@ async function getShiftDataBetweenDates(start, end) {
 
     if (start && end) {
         // get data from firestore with a snapshot between dates input by user
-        const getUserDocument = async () => {
+        async function getUserDocument(){
             const snapshot = await firestore
                 .collection('WorkshiftSchedules')
                 .where('date', '>=', start)
@@ -91,12 +113,21 @@ async function getShiftDataBetweenDates(start, end) {
                 .get();
             console.log(snapshot)
             var myDocs = snapshot.docs.map(collectIdsAndDocs);
-            return (myDocs)
+            return myDocs
         }
+        
+        //get firestore data
         result = await getUserDocument().then(function (response) {
-            return response;
+            return response
+        })
+
+        //map data for user display names from UIDs
+        result = await mapNames(result).then(function (mappedResponse) {
+            AsyncStorage.setItem('workshiftData', mappedResponse)
+            return mappedResponse
         })
     }
+    console.log(result)
     return result;
 }
 

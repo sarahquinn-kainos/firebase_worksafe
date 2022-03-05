@@ -9,6 +9,7 @@ function workshiftCardsAdminView() {
     const isAdmin = true;
     //const [currentShiftDoc, setShiftDoc] = useState({});
     const [currentInfo, setcurrentInfo] = useState("");
+    //const [staffNames, setStaffNames] = useState([]);
 
     // TEMP static values for testing and development
     const start = new Date('2022-02-15T00:00:00Z');
@@ -16,36 +17,26 @@ function workshiftCardsAdminView() {
 
     function getCurrentInfo() {
         getShiftDataBetweenDates(start, end).then(data => {
-            mapNames(data).then((mappedData) => {
-                console.log(mappedData)
-                setcurrentInfo(data)
-            })
+            console.log(data)
+            setcurrentInfo(data)
         })
     }
 
-    const mapNames = async (data) => {
-
-        console.log(data)
-        data.forEach(async (doc) => {
-            console.log(doc)
-            var staff = doc.staff
-            console.log(staff)
-            var staff_names = []
-            staff.forEach(async (user) => {
-                console.log(user)
-                await getUserDisplayName(user).then((displayName) => {
-                    console.log(displayName)
-                    staff_names.push(displayName)
-                })
-            })
-            doc.staff = staff_names
-        })
-        return data
-    }
+    //     useEffect(() => {
+    //     async function getData(){
+    //         await getShiftDataBetweenDates(start, end).then(data => {
+    //             setcurrentInfo(data)
+    //         })
+    //     }
+    //     getData().then(()=>{
+    //         console.log(currentInfo)
+    //     })
+    // }, [currentInfo]);
 
     useEffect(() => {
         getCurrentInfo()
     }, []);
+
 
 
     if (isAdmin) {
@@ -58,7 +49,9 @@ function workshiftCardsAdminView() {
                             var date = d.date.toDate().toLocaleDateString();
                             var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
                             var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
-                            var staff = d.staff
+                            var staff_array = d.staff;
+                            console.log(staff_array)
+                            var staff_string = staff_array.toString()
 
                             return (
                                 <Card id={index} style={{ width: 300 }}>
@@ -77,7 +70,7 @@ function workshiftCardsAdminView() {
                                             </HStack>
                                             <VStack pt="1">
                                                 <Text >Staff:  </Text>
-                                                <Text></Text>
+                                                {staff_array}
                                             </VStack>
                                         </VStack>
                                     </Center>
