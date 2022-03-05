@@ -1,13 +1,15 @@
 import { auth } from '../firebase'
-import { Card, Center, NativeBaseProvider, Text, VStack, HStack } from 'native-base';
+import { Card, Center, NativeBaseProvider, Text, VStack, HStack, Button } from 'native-base';
 import { getShiftDataBetweenDates, getUserDisplayName } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
 function workshiftCardsAdminView() {
 
     const isAdmin = true;
     const [currentInfo, setcurrentInfo] = useState("");
+    const navigator = useNavigation();
 
     // TEMP static values for testing and development
     const start = new Date('2022-02-15T00:00:00Z');
@@ -19,6 +21,11 @@ function workshiftCardsAdminView() {
             return (result)
         })
         return data;
+    }
+
+    const editShift = (id) => {
+        console.log(id)
+        navigator.navigate("Home")
     }
 
     useEffect(async () => {
@@ -41,46 +48,53 @@ function workshiftCardsAdminView() {
                             var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
                             var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
                             var staff_array = new Array;
-                            var card_colour = 'white'
+                            var shift_id = d.id
                             staff_array = d.staff;
-                            console.log(staff_array)
-                           
+
 
                             return (
-                                <Card id={index} style={{ width: 300 }}>
-                                    <Center>
-                                        <VStack>
-                                            <HStack pt="1">
+                                <>
+                                    <Card id={shift_id} style={{ width: 300 }}>
+                                        <Center>
+                                            <VStack>
                                                 <Center><Text> {date}</Text></Center>
-                                            </HStack>
-                                            <HStack pt="1">
-                                                <Text >Start:  </Text>
-                                                <Text> {startTime}</Text>
-                                            </HStack>
-                                            <HStack pt="1">
-                                                <Text >End:  </Text>
-                                                <Text> {endTime}</Text>
-                                            </HStack>
-                                            <VStack pt="1">
-                                                <Text >Staff:  </Text>
-                                                <Text>{
-                                                    staff_array ?
-                                                        staff_array.map((staff) => {
-                                                            return (
-                                                                <Text>
-                                                                {" | " + staff.display_name}
-                                                                </Text>
-                                                                )
-                                                        }) :
-                                                        null}</Text>
+                                                <HStack pt="1">
+                                                    <Text bold>Start:  </Text>
+                                                    <Text> {startTime}</Text>
+                                                </HStack>
+                                                <HStack pt="1">
+                                                    <Text bold>End:  </Text>
+                                                    <Text> {endTime}</Text>
+                                                </HStack>
+                                                <Text>{"\n"}</Text>
+                                                <VStack pt="1">
+                                                    <Center><Text bold underline>Staff</Text></Center>
+                                                    <Text>{"\n"}</Text>
+                                                    <VStack>
+                                                        {
+                                                            staff_array ?
+                                                                staff_array.map((staff) => {
+                                                                    return (
+                                                                        <Text>
+                                                                            {staff.display_name}
+                                                                        </Text>
+                                                                    )
+                                                                }) :
+                                                                null}
+                                                    </VStack>
+                                                    <Text>{"\n"}</Text>
+                                                    <Button small transparent onPress={() => {
+                                                        editShift(shift_id)}
+                                                        }>Edit</Button>
+                                                </VStack>
                                             </VStack>
-                                        </VStack>
-                                    </Center>
-                                </Card>
+                                        </Center>
+                                    </Card>
+                                    <Text>{"\n"}</Text>
+                                    <Text>{"\n"}</Text>
+                                </>
                             )
                         }) : null}
-                    <Text>{"\n"}</Text>
-                    <Text>{"\n"}</Text>
                 </VStack>
             </Center>
         );
