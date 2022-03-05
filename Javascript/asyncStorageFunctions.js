@@ -32,7 +32,8 @@ const getDatesFromAsync = () => {
     })
 }
 
-const getWorkshiftDataFromAsync = () => {
+const getWorkshiftDataFromAsync = async () => {
+    var data;
     const getData = async () => {
         try {
             var data = await AsyncStorage.getItem('workshiftData')
@@ -41,9 +42,8 @@ const getWorkshiftDataFromAsync = () => {
             console.log(err)
         }
     }
-    getData().then((data)=>{
-        return data;
-    })
+    data = await getData()
+    return data;
 }
 
 export {

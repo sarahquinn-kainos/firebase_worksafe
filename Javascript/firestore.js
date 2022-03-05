@@ -79,23 +79,23 @@ async function getShiftDataBetweenDates(start, end) {
     };
 
     async function mapNames(data) {
-        console.log(data)
+        //console.log(data)
         data.forEach((doc) => {
-            console.log(doc) // valid document from snapshot 
+            //console.log(doc) // valid document from snapshot 
             var staff = doc.staff // get staff array from document 
-            console.log(staff) // valid array
+            //console.log(staff) // valid array
             var staff_names = new Array
             // loping through each document in the retrieved snapshot - map each UID to a user's display name for UI 
-            staff.forEach((user) => {
-                getUserDisplayName(user).then((displayName) => {
+            staff.forEach(async (user) => {
+                await getUserDisplayName(user).then((displayName) => {
                     staff_names.push(displayName)
-                    console.log(staff_names) //valid array
+                    //console.log(staff_names) //valid array
                     doc.staff = staff_names
                 })
             })
-            console.log(doc)//valid object
+            //console.log(doc)//valid object
         })
-        console.log(data) // valid object 
+        //console.log(data) // valid object 
         return data
     }
 
@@ -111,23 +111,21 @@ async function getShiftDataBetweenDates(start, end) {
                 .where('date', '>=', start)
                 .where('date', '<=', end)
                 .get();
-            console.log(snapshot)
+            //console.log(snapshot)
             var myDocs = snapshot.docs.map(collectIdsAndDocs);
+            myDocs = await mapNames(myDocs).then(function (mappedResponse) {
+                return mappedResponse
+            })
             return myDocs
         }
-        
         //get firestore data
         result = await getUserDocument().then(function (response) {
             return response
         })
-
         //map data for user display names from UIDs
-        result = await mapNames(result).then(function (mappedResponse) {
-            AsyncStorage.setItem('workshiftData', mappedResponse)
-            return mappedResponse
-        })
     }
-    console.log(result)
+    //console.log("function returns:")
+    //console.log(result)
     return result;
 }
 
