@@ -69,7 +69,9 @@ const shiftManageScreen = () => {
             <Center flex={1} px="3">
                 <ShiftScheduleOptions />
                 <Text>{"\n"}</Text>
-                {dateTimePicker()}
+                {dateTimePicker('start_date')}
+                <Text>{"\n"}</Text>
+                {dateTimePicker('end_date')}
                 <Text>{"\n"}</Text>
                 <Button onPress={getSelectedUsersFromAsync}>TEST</Button>
                 <Button onPress={submitNewShift}>Create Shift</Button>

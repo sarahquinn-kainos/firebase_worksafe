@@ -3,14 +3,14 @@ import { firestore } from '../firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-async function getSingleDocByDocId(documentID) {
+async function getSingleDocByDocId(collection, documentID) {
     const user = auth.currentUser; // user is signed into app 
     var result;
     if (user) {
         // get data from firestore with a snapshot 
         const getUserDocument = async () => {
             const snapshot = await firestore
-                .collection('Users').doc(documentID).get()
+                .collection(collection).doc(documentID).get()
             const myDoc = snapshot.data()
             return (myDoc)
         }
@@ -25,7 +25,7 @@ async function getUserDisplayName(documentID) {
     const user = auth.currentUser;
     var result;
     if (user) {
-        result = await getSingleDocByDocId(documentID).then(function (response) {
+        result = await getSingleDocByDocId('Users', documentID).then(function (response) {
             return response
         })
     }

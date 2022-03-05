@@ -12,8 +12,21 @@ function userSelection() {
     //set selectedUsers checkbox group in async storage to access in other components
 
     useEffect(async () => {
+        var objArr = new Array;
         try {
-            await AsyncStorage.setItem('selectedUsers', groupValue)
+            usersArr.map((doc) => {
+                var uid = doc.id;
+                var display_name = doc.first_name + ' ' + doc.surname
+                var data = {
+                    "uid": uid,
+                    "display_name": display_name
+                }
+                if (groupValue.includes(uid)) {
+                    objArr.push(data)
+                }
+            })
+            console.log(objArr)
+            await AsyncStorage.setItem('selectedUsers', JSON.stringify(objArr))
             console.log(groupValue)
         } catch (err) {
             console.log(err)
@@ -39,16 +52,20 @@ function userSelection() {
                     <Text>Selected: ({groupValue.length})</Text>
                     <Text>{"\n"}</Text>
                     <VStack>
-                    <Checkbox.Group onChange={setGroupValue} value={groupValue} accessibilityLabel="choose users">
+                        <Checkbox.Group onChange={setGroupValue} value={groupValue} accessibilityLabel="choose users">
                             {usersArr ?
                                 usersArr.map((d, index) => {
                                     var uid = d.id;
                                     var full_name = d.first_name + " " + d.surname;
+                                    var staff_data = {
+                                        "uid": uid,
+                                        "display_name": full_name
+                                    }
                                     return (
-                                            // <Checkbox value={uid ? uid : null}>
-                                            //     {full_name ? full_name : null}
-                                            // </Checkbox>
-                                            <Checkbox value={uid ? uid : null}>
+                                        // <Checkbox value={uid ? uid : null}>
+                                        //     {full_name ? full_name : null}
+                                        // </Checkbox>
+                                        <Checkbox value={uid ? uid : null}>
                                             {full_name ? full_name : null}
                                         </Checkbox>
                                     )
