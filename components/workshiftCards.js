@@ -25,7 +25,7 @@ function workshiftCardsAdminView() {
 
     const editShift = (id) => {
         console.log(id)
-        navigator.navigate("Home")
+        //navigator.navigate("Home")
     }
 
     useEffect(async () => {
