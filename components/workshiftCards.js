@@ -15,7 +15,7 @@ function workshiftCardsAdminView() {
 
     async function getCurrentInfo() {
         var data = await getShiftDataBetweenDates(start, end).then((result) => {
-            console.log(result) // correct mapped values 
+            //console.log(result) // correct mapped values 
             return (result)
         })
         return data;
@@ -24,60 +24,33 @@ function workshiftCardsAdminView() {
     useEffect(async () => {
         await getCurrentInfo().then((data) => {
             setcurrentInfo(data)
-            console.log("useEffect got: ")
-            console.log(data)
+            // console.log("useEffect got: ")
+            // console.log(data)
         })
     }, []);
 
-
-    // const StaffList = async () => {
-    //     var temp;
-
-    //     async function mapNames() {
-    //         var result = await Promise.all(
-    //             currentInfo.map((d) => {
-    //                 // var date = d.date.toDate().toLocaleDateString();
-    //                 // var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
-    //                 // var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
-    //                 var staff_array = d.staff;
-    //                 var staff_names = new Array
-    //                 staff_array.forEach(async (uid) => {
-    //                     await getUserDisplayName(uid).then((displayName) => {
-    //                         staff_names.push(displayName)
-    //                         //console.log(staff_names) //valid array
-    //                         doc.staff = staff_names
-    //                     })
-    //                 })
-    //                 return result;
-    //             })
-    //         )
-    //     }
-    //     temp = await mapNames().then(()=>{
-    //         console.log(temp)
-    //     })
-
-    //     return (
-    //         <Text>{temp}</Text>
-    //     )
-    // }
-
     if (isAdmin) {
+        console.log(currentInfo)
         return (
             <Center>
                 <VStack mt="4">
 
                     {currentInfo ?
                         currentInfo.map((d, index) => {
-                            // var date = d.date.toDate().toLocaleDateString();
-                            // var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
-                            // var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
-                            var staff_array = d.staff;
+                            var date = d.date.toDate().toLocaleDateString();
+                            var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
+                            var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
+                            var staff_array = new Array;
+                            var card_colour = 'white'
+                            staff_array = d.staff;
+                            console.log(staff_array)
+                           
 
                             return (
                                 <Card id={index} style={{ width: 300 }}>
                                     <Center>
                                         <VStack>
-                                            {/* <HStack pt="1">
+                                            <HStack pt="1">
                                                 <Center><Text> {date}</Text></Center>
                                             </HStack>
                                             <HStack pt="1">
@@ -87,7 +60,7 @@ function workshiftCardsAdminView() {
                                             <HStack pt="1">
                                                 <Text >End:  </Text>
                                                 <Text> {endTime}</Text>
-                                            </HStack> */}
+                                            </HStack>
                                             <VStack pt="1">
                                                 <Text >Staff:  </Text>
                                                 <Text>{
@@ -95,7 +68,7 @@ function workshiftCardsAdminView() {
                                                         staff_array.map((staff) => {
                                                             return (
                                                                 <Text>
-                                                                {" | " + staff}
+                                                                {" | " + staff.display_name}
                                                                 </Text>
                                                                 )
                                                         }) :

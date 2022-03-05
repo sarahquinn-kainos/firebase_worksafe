@@ -10,35 +10,6 @@ import { getSelectedUsersFromAsync } from '../../Javascript/asyncStorageFunction
 
 export function ShiftScheduleOptions() {
 
-    const navigation = useNavigation();
-
-    
-    
-    const submitNewShift = () => {
-
-        const shift_date = new Date('2022-03-01');
-        const shift_start_time = new Date('2022-02-16T09:00:00Z');
-        const shift_end_time = new Date('2022-03-01T16:00:00Z');
-        const worker_uids = ['s5CaeMidYmhsQHZs4SP55KhIF453'];
-        const documentData = {
-        "staff": worker_uids,
-        "date": shift_date,
-        "start_datetime": shift_start_time,
-        "end_datetime": shift_end_time
-        }
-        try {
-            writeDocumentToCollection('WorkshiftSchedules', null, documentData);
-            //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
-        }
-        catch {
-            (err) => {
-                console.log(err)
-            }
-        } 
-        //reset(); //reset form
-        //navigation.navigate("Login")
-    }
-
     // Update shift - faciliated by screen:
     // View Schedule (new screen to navigate to)
     //=====
@@ -59,16 +30,49 @@ export function ShiftScheduleOptions() {
     )
 }
 
+const submitNewShift = () => {
+
+    const shift_date = new Date('2022-03-03');
+    const shift_start_time = new Date('2022-03-03T09:00:00Z');
+    const shift_end_time = new Date('2022-03-03T16:00:00Z');
+    const worker_uids = [
+        {
+            "uid": "RJYGSDIE8gW9mE6mA5PUrJ54x9H3",
+            "display_name": "Bob Smith"
+        },
+        {
+            "uid": "FiTihOWCAue4B0n2EAkpM4rJEpm2",
+            "display_name": "Sarah Bing"
+        }
+    ];
+    const documentData = {
+        "staff": worker_uids,
+        "date": shift_date,
+        "start_datetime": shift_start_time,
+        "end_datetime": shift_end_time
+    }
+    try {
+        writeDocumentToCollection('WorkshiftSchedules', null, documentData);
+        //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
+    }
+    catch {
+        (err) => {
+            console.log(err)
+        }
+    }
+}
+
 const shiftManageScreen = () => {
 
     return (
         <NativeBaseProvider>
             <Center flex={1} px="3">
-                <ShiftScheduleOptions/>
+                <ShiftScheduleOptions />
                 <Text>{"\n"}</Text>
                 {dateTimePicker()}
                 <Text>{"\n"}</Text>
                 <Button onPress={getSelectedUsersFromAsync}>TEST</Button>
+                <Button onPress={submitNewShift}>Create Shift</Button>
                 <Text>{"\n"}</Text>
                 {userSelection()}
             </Center>

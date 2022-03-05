@@ -113,9 +113,9 @@ async function getShiftDataBetweenDates(start, end) {
                 .get();
             //console.log(snapshot)
             var myDocs = snapshot.docs.map(collectIdsAndDocs);
-            myDocs = await mapNames(myDocs).then(function (mappedResponse) {
-                return mappedResponse
-            })
+            // myDocs = await mapNames(myDocs).then(function (mappedResponse) {
+            //     return mappedResponse
+            // })
             return myDocs
         }
         //get firestore data
@@ -125,7 +125,7 @@ async function getShiftDataBetweenDates(start, end) {
         //map data for user display names from UIDs
     }
     //console.log("function returns:")
-    //console.log(result)
+    console.log(result)
     return result;
 }
 
