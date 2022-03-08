@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input } from "native-base"
 import { useNavigation } from '@react-navigation/core'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function ScheduleManageOptions() {
 
@@ -23,7 +24,7 @@ export function ScheduleManageOptions() {
 
 
 const scheduleManageScreen = () => {
-
+    AsyncStorage.clear();
     return (
         <NativeBaseProvider>
             <Center flex={1} px="3">

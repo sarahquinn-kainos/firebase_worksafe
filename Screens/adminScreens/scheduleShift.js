@@ -72,7 +72,7 @@ const getTime = async () =>{
 }
 
 const shiftManageScreen = () => {
-    //AsyncStorage.clear();
+    
     return (
         <NativeBaseProvider>
            { <Center flex={1} px="3">
