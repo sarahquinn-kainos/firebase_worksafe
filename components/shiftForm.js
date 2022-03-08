@@ -1,6 +1,6 @@
 import { getSingleDocByDocId } from '../Javascript/firestore';
 import React, { useState } from 'react'
-import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input } from "native-base"
+import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input, HStack } from "native-base"
 import { useNavigation } from '@react-navigation/core'
 import { writeDocumentToCollection } from '../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -58,16 +58,24 @@ function shiftFormScreen(id) {
         var shift_end_time;
         var worker_uids;
         var documentData;
-        await getSelectedUsersFromAsync.then((response) => {
+        await getSelectedUsersFromAsync().then((response) => {
+            console.log('users: ')
+            console.log(response)
             worker_uids = response
         })
         await getDataFromAsyncByLabel('shift_date').then((response) => {
+            console.log('shift_date: ')
+            console.log(response)
             shift_date = response
         })
         await getDataFromAsyncByLabel('shift_start_time').then((response) => {
+            console.log('shift_start_time: ')
+            console.log(response)
             shift_start_time = response
         })
         await getDataFromAsyncByLabel('shift_end_time').then((response) => {
+            console.log('shift_end_time: ')
+            console.log(response)
             shift_end_time = response
         })
         if (shift_date && shift_end_time && shift_start_time && worker_uids) {
@@ -83,13 +91,6 @@ function shiftFormScreen(id) {
         return documentData
     }
 
-    const getTime = async (label) => {
-        await getDataFromAsyncByLabel(label).then((data) => {
-            console.log(data)
-        })
-    }
-
-
     const ShiftEntryForm = () => {
 
         return (
@@ -97,18 +98,23 @@ function shiftFormScreen(id) {
                 <Center flex={1} px="3">
                     <Heading>{header ? header : null}</Heading>
                     <Text>{"\n"}</Text>
-                    {dateTimePicker('shift_date')}
+                    <VStack>
+                        {dateTimePicker('shift_date')}
+                    </VStack>
                     <Text>{"\n"}</Text>
-                    {timePicker('start_time')}
+                    <HStack>
+                        <Text pt={2}>Start  </Text>
+                        {timePicker('shift_start_time')}
+                    </HStack>
                     <Text>{"\n"}</Text>
-                    <Button onPress={getSelectedUsersFromAsync}>Get Users Selected</Button>
-                    <Button onPress={() => {
-                        getTime('start_time')
-                    }}>Get Time Selected</Button>
-                    <Text>{"\n"}</Text>
-                    {/* <Button onPress={submitNewShift}>Create Shift</Button> */}
+                    <HStack>
+                        <Text pt={2}>End  </Text>
+                        {timePicker('shift_end_time')}
+                    </HStack>
                     <Text>{"\n"}</Text>
                     {userSelection()}
+                    <Text>{"\n"}</Text>
+                    <Button onPress={submitShift}>Submit</Button>
                 </Center>
             </VStack>
         )
