@@ -12,24 +12,26 @@ function userSelection() {
     //set selectedUsers checkbox group in async storage to access in other components
 
     useEffect(async () => {
-        var objArr = new Array;
-        try {
-            usersArr.map((doc) => {
-                var uid = doc.id;
-                var display_name = doc.first_name + ' ' + doc.surname
-                var data = {
-                    "uid": uid,
-                    "display_name": display_name
-                }
-                if (groupValue.includes(uid)) {
-                    objArr.push(data)
-                }
-            })
-            console.log(objArr)
-            await AsyncStorage.setItem('selectedUsers', JSON.stringify(objArr))
-            console.log(groupValue)
-        } catch (err) {
-            console.log(err)
+        if (groupValue.length > 0) {
+            var objArr = new Array;
+            try {
+                usersArr.map((doc) => {
+                    var uid = doc.id;
+                    var display_name = doc.first_name + ' ' + doc.surname
+                    var data = {
+                        "uid": uid,
+                        "display_name": display_name
+                    }
+                    if (groupValue.includes(uid)) {
+                        objArr.push(data)
+                    }
+                })
+                console.log(objArr)
+                await AsyncStorage.setItem('selectedUsers', JSON.stringify(objArr))
+                console.log(groupValue)
+            } catch (err) {
+                console.log(err)
+            }
         }
     }, [groupValue]);
 
@@ -49,7 +51,7 @@ function userSelection() {
         <>
             <Card style={{ width: 300 }}>
                 <ScrollView>
-                    <Text>Selected: ({groupValue.length})</Text>
+                    <Text>Staff Selected: ({groupValue.length})</Text>
                     <Text>{"\n"}</Text>
                     <VStack>
                         <Checkbox.Group onChange={setGroupValue} value={groupValue} accessibilityLabel="choose users">
