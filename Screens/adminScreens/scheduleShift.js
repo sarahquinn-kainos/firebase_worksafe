@@ -5,12 +5,13 @@ import { writeDocumentToCollection } from '../../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dateTimePicker from '../../components/datePicker';
 import userSelection from '../../components/userSelection';
-import { getSelectedUsersFromAsync } from '../../Javascript/asyncStorageFunctions';
+import { getDataFromAsyncByLabel, getSelectedUsersFromAsync } from '../../Javascript/asyncStorageFunctions';
+import timePicker from '../../components/timePicker';
+import shiftFormScreen from '../../components/shiftForm';
 
 
-export function ShiftScheduleOptions() {
+const ShiftInputForm = () => {
 
-    // Update shift - faciliated by screen:
     // View Schedule (new screen to navigate to)
     //=====
     // Pull data for this week (monday start of week) based on current date (create some dummy shifts)
@@ -26,6 +27,7 @@ export function ShiftScheduleOptions() {
             <Heading textAlign="center" mb="10">
                 Create new Shift
             </Heading>
+            {shiftFormScreen()}
         </VStack>
     )
 }
@@ -62,22 +64,20 @@ const submitNewShift = () => {
     }
 }
 
-const shiftManageScreen = () => {
+const getTime = async () =>{
+    await getDataFromAsyncByLabel('start_time').then((data) => {
+        console.log(data)
+    })
 
+}
+
+const shiftManageScreen = () => {
+    //AsyncStorage.clear();
     return (
         <NativeBaseProvider>
-            <Center flex={1} px="3">
-                <ShiftScheduleOptions />
-                <Text>{"\n"}</Text>
-                {dateTimePicker('start_date')}
-                <Text>{"\n"}</Text>
-                {dateTimePicker('end_date')}
-                <Text>{"\n"}</Text>
-                <Button onPress={getSelectedUsersFromAsync}>TEST</Button>
-                <Button onPress={submitNewShift}>Create Shift</Button>
-                <Text>{"\n"}</Text>
-                {userSelection()}
-            </Center>
+           { <Center flex={1} px="3">
+               <ShiftInputForm/>
+            </Center>}
         </NativeBaseProvider>
     )
 
