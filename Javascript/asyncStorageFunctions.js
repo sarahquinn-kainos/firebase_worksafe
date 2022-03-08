@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getSelectedUsersFromAsync = () => {
+    var result;
     const getData = async () => {
         try {
             var data = await AsyncStorage.getItem('selectedUsers')
@@ -9,12 +10,13 @@ const getSelectedUsersFromAsync = () => {
             console.log(err)
         }
     }
-    getData().then((data)=>{
+    result = getData().then((data)=>{
         // data = data.split(',') // convert back to an array 
         data = JSON.parse(data)
-        console.log(data)
+        //console.log(data)
         return data;
     })
+    return result;
 }
 
 const getDataFromAsyncByLabel = async (label) => {
