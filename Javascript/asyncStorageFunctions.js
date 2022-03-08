@@ -17,7 +17,8 @@ const getSelectedUsersFromAsync = () => {
     })
 }
 
-const getDataFromAsyncByLabel = (label) => {
+const getDataFromAsyncByLabel = async (label) => {
+    var result;
     const getData = async () => {
         try {
             var data = await AsyncStorage.getItem(label)
@@ -26,9 +27,11 @@ const getDataFromAsyncByLabel = (label) => {
             console.log(err)
         }
     }
-    getData().then((data)=>{
+    result = await getData().then((data)=>{
+        console.log(data)
         return data;
     })
+    return result;
 }
 
 const getWorkshiftDataFromAsync = async () => {
