@@ -4,7 +4,6 @@ import { NativeBaseProvider, Button, Text, Center } from "native-base";
 import screenWithDrawerNav from '../../components/drawerNav';
 import workshiftCardsAdminView from '../../components/workshiftCards';
 
-// FIX THE NAVIGATION ISSUE WHEN GOING BACK - SHOULDNT BE HOME SCREEN
 const ViewScheduleHome = () => {
     return (
     <Center>
