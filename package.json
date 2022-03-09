@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@cawfree/react-native-simpler-date-picker": "^0.1.0-alpha.4",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-firebase/app": "^14.2.2",
     "@react-native-firebase/firestore": "^14.2.2",
@@ -32,7 +33,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.0",
     "react-native-web": "0.17.1",
-    "@react-native-async-storage/async-storage": "~1.15.0"
+    "react-time-picker": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

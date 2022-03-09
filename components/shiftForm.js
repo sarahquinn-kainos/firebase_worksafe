@@ -53,11 +53,23 @@ function shiftFormScreen(id) {
 
 
     async function submitShift() {
+
         var shift_date;
         var shift_start_time;
         var shift_end_time;
         var worker_uids;
         var documentData;
+
+        function convertTimeToShiftDateTime(value){
+            var timeValues =  value.replace(/["']/g, "").split(":")
+            var dateValue = new Date(shift_date);
+            var hours = Number(timeValues[0])
+            var mins = Number(timeValues[1])
+            dateValue.setHours(hours)
+            dateValue.setMinutes(mins)
+            return dateValue
+        }
+        
         await getSelectedUsersFromAsync().then((response) => {
             console.log('users: ')
             console.log(response)
@@ -71,12 +83,12 @@ function shiftFormScreen(id) {
         await getDataFromAsyncByLabel('shift_start_time').then((response) => {
             console.log('shift_start_time: ')
             console.log(response)
-            shift_start_time = response
+            shift_start_time = convertTimeToShiftDateTime(response)
         })
         await getDataFromAsyncByLabel('shift_end_time').then((response) => {
             console.log('shift_end_time: ')
             console.log(response)
-            shift_end_time = response
+            shift_end_time = convertTimeToShiftDateTime(response)
         })
         if (shift_date && shift_end_time && shift_start_time && worker_uids) {
             documentData = {
