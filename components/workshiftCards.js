@@ -3,6 +3,7 @@ import { Card, Center, NativeBaseProvider, Text, VStack, HStack, Button } from '
 import { getShiftDataBetweenDates, getUserDisplayName } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import shiftFormScreen from './shiftForm';
 
 
 function workshiftCardsAdminView() {
@@ -25,7 +26,7 @@ function workshiftCardsAdminView() {
 
     const editShift = (id) => {
         console.log(id)
-        //navigator.navigate("Home")
+        navigator.navigate('Manage Shifts', {shift_id: id})
     }
 
     useEffect(async () => {

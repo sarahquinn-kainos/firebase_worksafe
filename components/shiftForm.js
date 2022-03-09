@@ -11,18 +11,19 @@ import timePicker from './timePicker';
 import displaySingleWorkshiftCard from './singleWorkshiftCard';
 
 
-function shiftFormScreen(id) {
+function shiftFormScreen(params) {
+    console.log(params.shift_id)
     const [currentDocData, setCurrentDocData] = useState({})
     const [docID, setDocID] = useState('')
     const [header, setheader] = useState('')
 
-
     useEffect(async () => {
         try {
-            if (id == undefined) {
+            if (params == undefined) {
                 setheader('Create New Shift')
             } else {
-                setDocID(id)
+                var idFromNav = params.shift_id
+                setDocID(idFromNav)
                 setheader('Edit Shift')
             }
         } catch (err) {
