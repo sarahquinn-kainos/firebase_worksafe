@@ -2,8 +2,10 @@ import { auth } from '../firebase'
 import { Card, Center, NativeBaseProvider, Text, VStack, HStack, Button } from 'native-base';
 import { getShiftDataBetweenDates, getUserDisplayName } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import shiftFormScreen from './shiftForm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 
 function workshiftCardsAdminView() {
@@ -11,6 +13,7 @@ function workshiftCardsAdminView() {
     const isAdmin = true;
     const [currentInfo, setcurrentInfo] = useState("");
     const navigator = useNavigation();
+    const isFocused = useIsFocused();
 
     // TEMP static values for testing and development
     const start = new Date('2022-02-15T00:00:00Z');
@@ -26,7 +29,9 @@ function workshiftCardsAdminView() {
 
     const editShift = (id) => {
         console.log(id)
-        navigator.navigate('Manage Shifts', {shift_id: id})
+        AsyncStorage.setItem('current_shift_id', id)
+        navigator.navigate('Manage Shifts')
+        
     }
 
     useEffect(async () => {
@@ -35,7 +40,7 @@ function workshiftCardsAdminView() {
             // console.log("useEffect got: ")
             // console.log(data)
         })
-    }, []);
+    }, [isFocused]);
 
     if (isAdmin) {
         console.log(currentInfo)

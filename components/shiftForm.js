@@ -11,21 +11,23 @@ import timePicker from './timePicker';
 import displaySingleWorkshiftCard from './singleWorkshiftCard';
 
 
-function shiftFormScreen(params) {
-    console.log(params.shift_id)
+function shiftFormScreen() {
     const [currentDocData, setCurrentDocData] = useState({})
     const [docID, setDocID] = useState('')
     const [header, setheader] = useState('')
+    const navigator = useNavigation();
 
     useEffect(async () => {
         try {
-            if (params == undefined) {
-                setheader('Create New Shift')
-            } else {
-                var idFromNav = params.shift_id
-                setDocID(idFromNav)
-                setheader('Edit Shift')
-            }
+            await AsyncStorage.getItem('current_shift_id').then((result)=>{
+                if (result == undefined) {
+                    setheader('Create New Shift')
+                } else {
+                    setDocID(result)
+                    setheader('Edit Shift')
+                }
+
+            })
         } catch (err) {
             console.log(err)
         }
@@ -68,6 +70,8 @@ function shiftFormScreen(params) {
                     try {
                         //generate a new ID for a new shift with null param
                         writeDocumentToCollection('WorkshiftSchedules', null, data);
+                        alert("Shift Created")
+                        navigator.navigate('View Schedule')
                     }
                     catch {
                         (err) => {
@@ -78,6 +82,8 @@ function shiftFormScreen(params) {
                     try {
                         //update existing shift with ID
                         writeDocumentToCollection('WorkshiftSchedules', docID, data);
+                        alert("Shift Updated")
+                        navigator.navigate('View Schedule')
                     }
                     catch {
                         (err) => {
