@@ -111,7 +111,7 @@ async function getShiftDataBetweenDates(start, end) {
                 .where('date', '>=', start)
                 .where('date', '<=', end)
                 .get();
-            //console.log(snapshot)
+            console.log(snapshot)
             var myDocs = snapshot.docs.map(collectIdsAndDocs);
             // myDocs = await mapNames(myDocs).then(function (mappedResponse) {
             //     return mappedResponse

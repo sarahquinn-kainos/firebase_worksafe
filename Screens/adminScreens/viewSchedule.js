@@ -7,7 +7,6 @@ import workshiftCardsAdminView from '../../components/workshiftCards';
 const ViewScheduleHome = () => {
     return (
     <Center>
-        <Text>Test</Text>
        {workshiftCardsAdminView()}
     </Center>
     )
