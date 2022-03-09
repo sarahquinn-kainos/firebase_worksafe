@@ -1,5 +1,5 @@
 import { getSingleDocByDocId } from '../Javascript/firestore';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input, HStack } from "native-base"
 import { useNavigation } from '@react-navigation/core'
 import { writeDocumentToCollection } from '../Javascript/firestore';
@@ -11,48 +11,71 @@ import timePicker from './timePicker';
 
 
 function shiftFormScreen(id) {
-    const [docData, setDocData] = useState({})
     const [currentDocData, setCurrentDocData] = useState({})
     const [docID, setDocID] = useState('')
     const [header, setheader] = useState('')
 
 
-    // useEffect(async () => {
-    //     try {
-    //         await getSingleDocByDocId('WorkshiftSchedules', docID).then((data) => {
-    //             setCurrentDocData(data)
-    //         })
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }, [docID]);
+    useEffect(async () => {
+        try {
+            if (id == undefined) {
+                setheader('Create New Shift')
+            } else {
+                setDocID(id)
+                setheader('Edit Shift')
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }, []);
 
-    // useEffect(async () => {
-    //     if (docID != '') {
-    //         try {
-    //             //generate a new ID for a new shift with null param
-    //             writeDocumentToCollection('WorkshiftSchedules', null, documentData);
-    //         }
-    //         catch {
-    //             (err) => {
-    //                 console.log(err)
-    //             }
-    //         }
-    //     } else {
-    //         try {
-    //             //update existing shift with ID
-    //             writeDocumentToCollection('WorkshiftSchedules', docID, documentData);
-    //         }
-    //         catch {
-    //             (err) => {
-    //                 console.log(err)
-    //             }
-    //         }
-    //     }
-    // }, [docData]);
+    useEffect(async () => {
+        if (docID){
+            try {
+                await getSingleDocByDocId('WorkshiftSchedules', docID).then((data) => {
+                    setCurrentDocData(data)
+                })
+            } catch (err) {
+                console.log(err)
+            }
 
+        }   
+    }, [docID]);
 
     async function submitShift() {
+        try {
+            await formatDocument().then((data) => {
+                if (docID == '') {
+                    try {
+                        //generate a new ID for a new shift with null param
+                        writeDocumentToCollection('WorkshiftSchedules', null, data);
+                    }
+                    catch {
+                        (err) => {
+                            console.log(err)
+                        }
+                    }
+                } else {
+                    try {
+                        //update existing shift with ID
+                        writeDocumentToCollection('WorkshiftSchedules', docID, data);
+                    }
+                    catch {
+                        (err) => {
+                            console.log(err)
+                        }
+                    }
+                }
+            })
+        } catch {
+            (err) => {
+                console.log(err)
+            }
+        }
+    }
+
+
+    async function formatDocument() {
 
         var shift_date;
         var shift_start_time;
@@ -60,8 +83,8 @@ function shiftFormScreen(id) {
         var worker_uids;
         var documentData;
 
-        function convertTimeToShiftDateTime(value){
-            var timeValues =  value.replace(/["']/g, "").split(":")
+        function convertTimeToShiftDateTime(value) {
+            var timeValues = value.replace(/["']/g, "").split(":")
             var dateValue = new Date(shift_date);
             var hours = Number(timeValues[0])
             var mins = Number(timeValues[1])
@@ -69,7 +92,7 @@ function shiftFormScreen(id) {
             dateValue.setMinutes(mins)
             return dateValue
         }
-        
+
         await getSelectedUsersFromAsync().then((response) => {
             console.log('users: ')
             console.log(response)
@@ -98,7 +121,6 @@ function shiftFormScreen(id) {
                 "end_datetime": shift_end_time
             }
             console.log(documentData)
-            setDocData(documentData)
         }
         return documentData
     }
@@ -131,14 +153,6 @@ function shiftFormScreen(id) {
             </VStack>
         )
     }
-
-
-    // if (id == undefined) {
-    //     setheader('Create a Shift')
-    // } else {
-    //     setDocID(id)
-    //     setheader('Edit a Shift')
-    // }
 
 
 

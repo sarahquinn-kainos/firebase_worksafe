@@ -24,9 +24,6 @@ const ShiftInputForm = () => {
 
     return (
         <VStack space={4} alignItems="center">
-            <Heading textAlign="center" mb="10">
-                Create new Shift
-            </Heading>
             {shiftFormScreen()}
         </VStack>
     )
