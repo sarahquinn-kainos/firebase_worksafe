@@ -8,6 +8,7 @@ import dateTimePicker from './datePicker';
 import userSelection from './userSelection';
 import { getDataFromAsyncByLabel, getSelectedUsersFromAsync } from '../Javascript/asyncStorageFunctions';
 import timePicker from './timePicker';
+import displaySingleWorkshiftCard from './singleWorkshiftCard';
 
 
 function shiftFormScreen(id) {
@@ -30,7 +31,7 @@ function shiftFormScreen(id) {
     }, []);
 
     useEffect(async () => {
-        if (docID){
+        if (docID) {
             try {
                 await getSingleDocByDocId('WorkshiftSchedules', docID).then((data) => {
                     setCurrentDocData(data)
@@ -39,12 +40,25 @@ function shiftFormScreen(id) {
                 console.log(err)
             }
 
-        }   
+        }
     }, [docID]);
 
     useEffect(async () => {
-        console.log(currentDocData)  
+        console.log(currentDocData)
     }, [currentDocData]);
+
+    const CurrentShift = () =>{
+        if(currentDocData
+            && (Object.keys(currentDocData).length != 0
+            || Object.getPrototypeOf(currentDocData) != Object.prototype)){
+            console.log(currentDocData)
+            console.log('IF')
+            return displaySingleWorkshiftCard(currentDocData)
+        }else{
+            return null
+        }
+        
+    }
 
     async function submitShift() {
         try {
@@ -118,6 +132,7 @@ function shiftFormScreen(id) {
             shift_end_time = convertTimeToShiftDateTime(response)
         })
         if (shift_date && shift_end_time && shift_start_time && worker_uids) {
+            shift_date = new Date(shift_date)
             documentData = {
                 "staff": worker_uids,
                 "date": shift_date,
@@ -134,6 +149,9 @@ function shiftFormScreen(id) {
         return (
             <VStack space={4} alignItems="center">
                 <Center flex={1} px="3">
+                    {currentDocData ? <CurrentShift/>
+                     : null}
+                    <Text>{"\n"}</Text>
                     <Heading>{header ? header : null}</Heading>
                     <Text>{"\n"}</Text>
                     <VStack>
