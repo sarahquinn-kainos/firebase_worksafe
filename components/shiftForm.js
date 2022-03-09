@@ -42,6 +42,10 @@ function shiftFormScreen(id) {
         }   
     }, [docID]);
 
+    useEffect(async () => {
+        console.log(currentDocData)  
+    }, [currentDocData]);
+
     async function submitShift() {
         try {
             await formatDocument().then((data) => {
