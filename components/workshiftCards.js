@@ -13,7 +13,8 @@ function workshiftCardsAdminView() {
     const isAdmin = true;
     const [currentInfo, setcurrentInfo] = useState("");
     const navigator = useNavigation();
-    const isFocused = useIsFocused();
+    const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
+                                      //use this const to trigger a refresh of the data
 
     // TEMP static values for testing and development
     const start = new Date('2022-02-15T00:00:00Z');
@@ -21,7 +22,6 @@ function workshiftCardsAdminView() {
 
     async function getCurrentInfo() {
         var data = await getShiftDataBetweenDates(start, end).then((result) => {
-            //console.log(result) // correct mapped values 
             return (result)
         })
         return data;
@@ -37,8 +37,6 @@ function workshiftCardsAdminView() {
     useEffect(async () => {
         await getCurrentInfo().then((data) => {
             setcurrentInfo(data)
-            // console.log("useEffect got: ")
-            // console.log(data)
         })
     }, [isFocused]);
 
