@@ -1,9 +1,7 @@
-import { auth } from '../firebase'
-import { Card, Center, NativeBaseProvider, Text, VStack, HStack, Button } from 'native-base';
-import { getShiftDataBetweenDates, getUserDisplayName } from '../Javascript/firestore';
+import { Card, Center, Text, VStack, HStack, Button } from 'native-base';
+import { getShiftDataBetweenDates } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import shiftFormScreen from './shiftForm';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -16,12 +14,26 @@ function workshiftCardsAdminView() {
     const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
                                       //use this const to trigger a refresh of the data
 
-    // TEMP static values for testing and development
-    const start = new Date('2022-02-15T00:00:00Z');
-    const end = new Date('2022-03-28T23:59:00Z');
+
+    async function getParams(){
+        // get the params passed into storage via the modal on prvious screen 
+        var params = await AsyncStorage.getItem('show_shifts_params').then((result) => {
+            console.log("result from async = " + result)
+            return JSON.parse(result);
+        })
+        var start = new Date (params.query_date)
+        var weekIncrement = Number(params.query_weeks);
+        var end = new Date(params.query_date)
+        end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
+        return [start, end]
+    }
 
     async function getCurrentInfo() {
-        var data = await getShiftDataBetweenDates(start, end).then((result) => {
+        var [start, end] = await getParams()
+        console.log(start)
+        console.log(end)
+
+        var data = await getShiftDataBetweenDates(start , end ).then((result) => {
             return (result)
         })
         return data;
@@ -31,7 +43,6 @@ function workshiftCardsAdminView() {
         console.log(id)
         AsyncStorage.setItem('current_shift_id', id)
         navigator.navigate('Manage Shifts')
-        
     }
 
     useEffect(async () => {
@@ -39,6 +50,15 @@ function workshiftCardsAdminView() {
             setcurrentInfo(data)
         })
     }, [isFocused]);
+
+    useEffect(async () => {
+        if (currentInfo.length == 0){
+            alert("No shifts exist for dates selected.")
+            navigator.navigate('Manage Schedule')
+        }
+    }, []);
+
+    
 
     if (isAdmin) {
         console.log(currentInfo)
