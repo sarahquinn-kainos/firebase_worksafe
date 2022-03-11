@@ -68,7 +68,7 @@ function scheduleManageOptions() {
         return (
             <>
                 <Modal isOpen={showStartDateModal} onClose={() => setShowStartDateModal(false)}>
-                    <Modal.Content maxWidth="400px">
+                    <Modal.Content minWidth="400px">
                         <Modal.CloseButton />
                         <Modal.Body mt="10">
                             <Text>Number of weeks to show (default is 1):</Text>
