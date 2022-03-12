@@ -120,8 +120,8 @@ async function getShiftDataBetweenDatesForUser(start, end, uid) {
     // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
 
     if (start && end && uid) {
-    console.log("\n\n LOG \n\n Type of: uid = ")
-    console.log(typeof uid)
+    //console.log("\n\n LOG \n\n Type of: uid = ")
+    //console.log(typeof uid)
         // get data from firestore with a snapshot between dates input by user
         async function getDocument(){
             const snapshot = await firestore

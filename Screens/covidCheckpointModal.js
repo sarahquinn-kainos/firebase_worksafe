@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, Flex, VStack, HStack, Center, NativeBaseProvider, Text, Spacer, Button, FormControl, Input, Divider, Modal, Radio } from "native-base"
-import { addSubCollectionToExistingDocumentById, getCovidDataForUserLastSevenDays } from '../Javascript/firestore'
+import { writeDocumentToCollection } from '../Javascript/firestore'
 import { auth } from '../firebase'
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/core'
@@ -14,6 +14,8 @@ const CheckpointForm = () => {
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
+            "uid": "",
+            "timestamp": "",
             "diagnosed": false,
             "close_contact": false,
             "symptoms": false,
@@ -31,6 +33,7 @@ const CheckpointForm = () => {
           ]);
           //include uid in the document
         var formDataJSON = {
+            "uid": user.uid,
             "timestamp": stamp,
             "diagnosed": booleanValue.get(data.diagnosed),
             "close_contact": booleanValue.get(data.close_contact),
@@ -41,7 +44,7 @@ const CheckpointForm = () => {
 
         try {
             //Update to write to main collection
-            addSubCollectionToExistingDocumentById('Users', 'CovidStatus', user.uid ,null, formDataJSON);
+            writeDocumentToCollection('CovidCheckpoints' ,null, formDataJSON);
             //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
         }
         catch {
