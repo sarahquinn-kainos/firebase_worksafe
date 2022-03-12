@@ -7,10 +7,11 @@ import { Text, Center, NativeBaseProvider, VStack, Button } from "native-base"
 const sendResetPasswordEmail = () => {
     const user = auth.currentUser;
     const email = user.email;
-    auth.sendPasswordResetEmail(email).then(
-        alert("Email sent to " + email)
-    )
-        .catch(error => alert(error.message))
+    // auth.sendPasswordResetEmail(email).then(
+    //     alert("Email sent to " + email)
+    // )
+    //     .catch(error => alert(error.message))
+        user.sendEmailVerification().catch(error => alert(error.message))
 }
 
 const showUnerifiedHome = () => {

@@ -1,19 +1,22 @@
-import { Card, Center, Text, VStack, HStack, Button, Spinner } from 'native-base';
-import { getShiftDataBetweenDates } from '../Javascript/firestore';
+import { Card, Center, Text, VStack, HStack, Button } from 'native-base';
+import { getShiftDataBetweenDatesForUser } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { auth } from '../firebase';
 
 
-function workshiftCardsAdminView() {
+function workshiftCardsUserView() {
 
-    const isAdmin = true;
+    const user = auth.currentUser
+    const user_id = user.uid
     const [currentInfo, setcurrentInfo] = useState("");
     const [fetched, setFetched] = useState(false)
     const navigator = useNavigation();
     const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
                                       //use this const to trigger a refresh of the data
+
 
     async function getParams(){
         // get the params passed into storage via the modal on prvious screen 
@@ -33,42 +36,43 @@ function workshiftCardsAdminView() {
         console.log(start)
         console.log(end)
 
-        var data = await getShiftDataBetweenDates(start , end ).then((result) => {
+        var data = await getShiftDataBetweenDatesForUser(start , end, user_id ).then((result) => {
             return (result)
         })
+        console.log("data: " + data)
         return data;
     }
 
-    const editShift = (id) => {
-        console.log(id)
-        AsyncStorage.setItem('current_shift_id', id)
-        navigator.navigate('Manage Shifts')
-    }
+    // const editShift = (id) => {
+    //     console.log(id)
+    //     AsyncStorage.setItem('current_shift_id', id)
+    //     navigator.navigate('Manage Shifts')
+    // }
 
     useEffect(async () => {
         await getCurrentInfo().then((data) => {
             setcurrentInfo(data)
             setFetched(true)
         })
-    }, [isFocused]);
+    }, []);
 
     useEffect(async () => {
-            if (currentInfo.length == 0 && fetched){
-                alert("No shifts exist for dates selected.")
-                navigator.navigate('Manage Schedule')
-            }
+        if (currentInfo.length == 0 && fetched){
+            alert("No shifts exist for dates selected.")
+            navigator.navigate('Manage Schedule')
+        }
     }, [fetched]);
 
     
 
-    if (isAdmin) {
+ 
         console.log(currentInfo)
         return (
             <Center>
                 <VStack mt="4">
 
                     {currentInfo ?
-                        currentInfo.map((d, index) => {
+                        currentInfo.map((d) => {
                             var date = d.date.toDate().toLocaleDateString();
                             var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
                             var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
@@ -108,9 +112,9 @@ function workshiftCardsAdminView() {
                                                                 null}
                                                     </VStack>
                                                     <Text>{"\n"}</Text>
-                                                    <Button small transparent onPress={() => {
+                                                    {/* <Button small transparent onPress={() => {
                                                         editShift(shift_id)}
-                                                        }>Edit</Button>
+                                                        }>Request Change</Button> */}
                                                 </VStack>
                                             </VStack>
                                         </Center>
@@ -119,12 +123,12 @@ function workshiftCardsAdminView() {
                                     <Text>{"\n"}</Text>
                                 </>
                             )
-                        }) : <Spinner/>}
+                        }) : null}
                 </VStack>
             </Center>
         );
-    }
+    
 }
 
 
-export default workshiftCardsAdminView;
+export default workshiftCardsUserView;

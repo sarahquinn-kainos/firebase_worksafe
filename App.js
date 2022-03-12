@@ -17,6 +17,8 @@ import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration"
 import viewSchedule from './Screens/adminScreens/viewSchedule';
 import shiftManageScreen from './Screens/adminScreens/scheduleShift';
 import scheduleManageScreen from './Screens/adminScreens/manageSchedules';
+import manageUserSchedule from './Screens/manageUserSchedules';
+import viewScheduleForuser from './Screens/viewScheduleForUser';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,8 +40,10 @@ function StackNav() {
     <Stack.Screen name="UnverifiedHome" component={showUnerifiedHome} options={{ headerShown: false }} />
     <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
     <Stack.Screen name="View Schedule" component={viewSchedule} options={{headerBackTitleVisible: true }} />
-    <Stack.Screen name="Manage Schedule" component={scheduleManageScreen} options={{ headerShown: false }} />
+    <Stack.Screen name="Manage Schedule" component={scheduleManageScreen} options={{ headerBackTitle: false , headerBackTitleVisible: true}} />
     <Stack.Screen name="Manage Shifts" component={shiftManageScreen} options={{ headerShown: true , headerBackTitleVisible: true}} />
+    <Stack.Screen name="View User Schedule" component={viewScheduleForuser} options={{ headerTitle: "My Schedule", headerShown: true , headerBackTitleVisible: true}} />
+    <Stack.Screen name="Manage User Schedule" component={manageUserSchedule}  options={{ headerTitle: "My Schedule", headerShown: true , headerBackTitleVisible: false}} />
   </Stack.Navigator>
   );
 }

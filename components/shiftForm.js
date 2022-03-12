@@ -71,7 +71,7 @@ function shiftFormScreen() {
                         //generate a new ID for a new shift with null param
                         writeDocumentToCollection('WorkshiftSchedules', null, data);
                         alert("Shift Created")
-                        navigator.navigate('View Schedule')
+                        navigator.navigate('Manage Schedule')
                     }
                     catch {
                         (err) => {
@@ -83,7 +83,7 @@ function shiftFormScreen() {
                         //update existing shift with ID
                         writeDocumentToCollection('WorkshiftSchedules', docID, data);
                         alert("Shift Updated")
-                        navigator.navigate('View Schedule')
+                        navigator.navigate('Manage Schedule')
                     }
                     catch {
                         (err) => {
@@ -105,7 +105,8 @@ function shiftFormScreen() {
         var shift_date;
         var shift_start_time;
         var shift_end_time;
-        var worker_uids;
+        var worker_details;
+        var worker_uids = [];
         var documentData;
 
         function convertTimeToShiftDateTime(value) {
@@ -121,7 +122,10 @@ function shiftFormScreen() {
         await getSelectedUsersFromAsync().then((response) => {
             console.log('users: ')
             console.log(response)
-            worker_uids = response
+            worker_details = response
+            response.forEach(user => {
+                worker_uids.push(user.uid)
+            });
         })
         await getDataFromAsyncByLabel('shift_date').then((response) => {
             console.log('shift_date: ')
@@ -138,10 +142,11 @@ function shiftFormScreen() {
             console.log(response)
             shift_end_time = convertTimeToShiftDateTime(response)
         })
-        if (shift_date && shift_end_time && shift_start_time && worker_uids) {
+        if (shift_date && shift_end_time && shift_start_time && worker_details && worker_uids) {
             shift_date = new Date(shift_date)
             documentData = {
-                "staff": worker_uids,
+                "staff": worker_details,
+                "staff_uids": worker_uids,
                 "date": shift_date,
                 "start_datetime": shift_start_time,
                 "end_datetime": shift_end_time

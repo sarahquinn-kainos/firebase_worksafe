@@ -78,27 +78,6 @@ async function getShiftDataBetweenDates(start, end) {
         return { id: doc.id, ...doc.data() };
     };
 
-    async function mapNames(data) {
-        //console.log(data)
-        data.forEach((doc) => {
-            //console.log(doc) // valid document from snapshot 
-            var staff = doc.staff // get staff array from document 
-            //console.log(staff) // valid array
-            var staff_names = new Array
-            // loping through each document in the retrieved snapshot - map each UID to a user's display name for UI 
-            staff.forEach(async (user) => {
-                await getUserDisplayName(user).then((displayName) => {
-                    staff_names.push(displayName)
-                    //console.log(staff_names) //valid array
-                    doc.staff = staff_names
-                })
-            })
-            //console.log(doc)//valid object
-        })
-        //console.log(data) // valid object 
-        return data
-    }
-
     // The Firestore documentation mentions in its “Query limitations” section:
     // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
     // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
@@ -122,9 +101,44 @@ async function getShiftDataBetweenDates(start, end) {
         result = await getUserDocument().then(function (response) {
             return response
         })
-        //map data for user display names from UIDs
     }
-    //console.log("function returns:")
+    console.log(result)
+    return result;
+}
+
+async function getShiftDataBetweenDatesForUser(start, end, uid) {
+    var result;
+    console.log(start + " \n" + end + " \n" + uid)
+    
+    // mapping for firestore object - returns a promise of multiple docs 
+    const collectIdsAndDocs = (doc) => {
+        return { id: doc.id, ...doc.data() };
+    };
+
+    // The Firestore documentation mentions in its “Query limitations” section:
+    // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
+    // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
+
+    if (start && end && uid) {
+    console.log("\n\n LOG \n\n Type of: uid = ")
+    console.log(typeof uid)
+        // get data from firestore with a snapshot between dates input by user
+        async function getDocument(){
+            const snapshot = await firestore
+                .collection('WorkshiftSchedules')
+                .where('date', '>=', start)
+                .where('date', '<=', end)
+                .where('staff_uids', 'array-contains', uid)
+                .get();
+            console.log(snapshot)
+            var myDocs = snapshot.docs.map(collectIdsAndDocs);
+            return myDocs
+        }
+        //get firestore data
+        result = await getDocument().then(function (response) {
+            return response
+        })
+    }
     console.log(result)
     return result;
 }
@@ -242,5 +256,6 @@ export {
     getUserSubCollectionDocById,
     getCovidDataForUserLastSevenDays,
     getShiftDataBetweenDates,
+    getShiftDataBetweenDatesForUser,
     getUserDisplayName
 }

@@ -13,7 +13,8 @@ const showVerifiedHomeScreenContent = () => {
     const navigation = useNavigation();
 
     if (!currentUserDoc) {
-        getSingleDocByDocId(user.uid).then(result => {
+        getSingleDocByDocId('Users', user.uid).then(result => {
+            console.log(result)
             setCurrentUserDoc(result);
             setEmail(result.email)
             setDisplayName(user.displayName)
@@ -35,6 +36,10 @@ const showVerifiedHomeScreenContent = () => {
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('AccountManage') }}>
                         <Text bold color="white">Manage My Profile</Text>
+                    </Button>
+                    <Button minW={"100%"}
+                        onPress={() => { navigation.navigate('Manage User Schedule') }}>
+                        <Text bold color="white">Manage My Schedule</Text>
                     </Button>
                     <Text>{"\n"}</Text>
                 </Center>
