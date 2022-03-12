@@ -29,6 +29,7 @@ const CheckpointForm = () => {
             ["1", true],
             ["0", false]
           ]);
+          //include uid in the document
         var formDataJSON = {
             "timestamp": stamp,
             "diagnosed": booleanValue.get(data.diagnosed),
@@ -39,6 +40,7 @@ const CheckpointForm = () => {
         }
 
         try {
+            //Update to write to main collection
             addSubCollectionToExistingDocumentById('Users', 'CovidStatus', user.uid ,null, formDataJSON);
             //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
         }
