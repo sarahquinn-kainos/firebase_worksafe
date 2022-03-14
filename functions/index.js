@@ -10,12 +10,39 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send("Hello from Firebase!");
 });
 
+exports.getUserWorkingToday = functions.https.onRequest(async (request, response) => {
+    const uid = "FqBES2jj2VeAxD5qpJMtWm6Yarr2" //request.body.uid;
+    var start = new Date();
+    start.setUTCHours(0, 0, 0, 0);
+    var end = new Date();
+    end.setUTCHours(23, 59, 59, 999);
+    console.log("start: " + start)
+    console.log("end: " + end)
+    try {
+        const snapshot = await admin.firestore().collection('WorkshiftSchedules')
+            .where('date', '>=', start)
+            .where('date', '<=', end)
+            .where('staff_uids', 'array-contains', uid)
+            .get().then(data => {
+                return data
+            })
+        if (snapshot.empty){
+            response.send(false)
+        }else{
+            response.send(true)
+        }
+    } catch (err) {
+        console.log(err)
+        response.status(500).send(err)
+    }
+});
+
 const createTest = (message => {
     return admin.firestore().collection('testNotification')
-    .add(message)
-    .then(doc => {
-        console.log('TEST notification added: ', doc)
-    })
+        .add(message)
+        .then(doc => {
+            console.log('TEST notification added: ', doc)
+        })
 })
 
 
