@@ -26,13 +26,14 @@ const CheckpointForm = () => {
 
     // START Firestore FUNCTION 
     const saveFormData = data => {
-        var stamp = new Date().toISOString();
+        var stamp = new Date();
         const booleanValue = new Map([
             ["1", true],
             ["0", false]
           ]);
           //include uid in the document
         var formDataJSON = {
+            "user_display_name": user.displayName,
             "uid": user.uid,
             "timestamp": stamp,
             "diagnosed": booleanValue.get(data.diagnosed),

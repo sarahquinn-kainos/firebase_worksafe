@@ -72,7 +72,7 @@ async function getCovidDataForUserLastSevenDays(id) {
 
 async function getShiftDataBetweenDates(start, end) {
     var result;
-    
+
     // mapping for firestore object - returns a promise of multiple docs 
     const collectIdsAndDocs = (doc) => {
         return { id: doc.id, ...doc.data() };
@@ -84,7 +84,7 @@ async function getShiftDataBetweenDates(start, end) {
 
     if (start && end) {
         // get data from firestore with a snapshot between dates input by user
-        async function getUserDocument(){
+        async function getUserDocument() {
             const snapshot = await firestore
                 .collection('WorkshiftSchedules')
                 .where('date', '>=', start)
@@ -109,7 +109,7 @@ async function getShiftDataBetweenDates(start, end) {
 async function getShiftDataBetweenDatesForUser(start, end, uid) {
     var result;
     console.log(start + " \n" + end + " \n" + uid)
-    
+
     // mapping for firestore object - returns a promise of multiple docs 
     const collectIdsAndDocs = (doc) => {
         return { id: doc.id, ...doc.data() };
@@ -120,10 +120,10 @@ async function getShiftDataBetweenDatesForUser(start, end, uid) {
     // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
 
     if (start && end && uid) {
-    //console.log("\n\n LOG \n\n Type of: uid = ")
-    //console.log(typeof uid)
+        //console.log("\n\n LOG \n\n Type of: uid = ")
+        //console.log(typeof uid)
         // get data from firestore with a snapshot between dates input by user
-        async function getDocument(){
+        async function getDocument() {
             const snapshot = await firestore
                 .collection('WorkshiftSchedules')
                 .where('date', '>=', start)
@@ -141,6 +141,65 @@ async function getShiftDataBetweenDatesForUser(start, end, uid) {
     }
     console.log(result)
     return result;
+}
+
+async function isUserWorkingToday() {
+    const uid = auth.currentUser.uid
+    var shift_result;
+    var checkpoint_result;
+
+    var start = new Date();
+    start.setUTCHours(0, 0, 0, 0);
+    var end = new Date();
+    end.setUTCHours(23, 59, 59, 999);
+    console.log(start + " \n" + end + " \n" + uid)
+    if (start && end && uid) {
+        // get data from firestore with current current UID and start, end today from 00:00 - 23:59
+        async function getShifts() {
+            const snapshot = await firestore
+                .collection('WorkshiftSchedules')
+                .where('date', '>=', start)
+                .where('date', '<=', end)
+                .where('staff_uids', 'array-contains', uid)
+                .get()
+                .then(response => {
+                    return response
+                });
+            console.log(snapshot)
+            return snapshot
+        }
+        async function getCovidDoc() {
+            const snapshot = await firestore
+                .collection('CovidCheckpoints')
+                .where('timestamp', '>=', start)
+                .where('timestamp', '<=', end)
+                .where('uid', '==', uid)
+                .get()
+                .then(response => {
+                    return response
+                });
+            console.log(snapshot)
+            return snapshot
+        }
+        //get firestore data
+        shift_result = await getShifts().then(function (response) {
+            return response
+        })
+        checkpoint_result = await getCovidDoc().then(function (response) {
+            return response
+        })
+        //if there are no shifts scheduled then return false - not triggering checkpoint modal 
+        if (shift_result.empty) {
+            return false
+        } else {
+            // if data is returned for checkpoint data for current user + todays date - do not re-trigger
+            if (!(checkpoint_result.empty)) {
+                return false
+            } else {
+                return true
+            }
+        }
+    }
 }
 
 async function getUserSubCollectionDocById(subCollection, id) {
@@ -257,5 +316,6 @@ export {
     getCovidDataForUserLastSevenDays,
     getShiftDataBetweenDates,
     getShiftDataBetweenDatesForUser,
-    getUserDisplayName
+    getUserDisplayName,
+    isUserWorkingToday
 }
