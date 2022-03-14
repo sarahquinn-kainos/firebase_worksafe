@@ -1,9 +1,10 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { auth } from '../firebase'
 import { getSingleDocByDocId } from '../Javascript/firestore'
 import { useNavigation } from '@react-navigation/core'
 import { Text, Center, NativeBaseProvider, VStack, Button } from "native-base"
 import screenWithDrawerNav from '../components/drawerNav'
+import { isUserWorkingToday } from '../Javascript/firestore'
 
 const showVerifiedHomeScreenContent = () => {
     const [currentUserDoc, setCurrentUserDoc] = useState(null);
@@ -21,6 +22,15 @@ const showVerifiedHomeScreenContent = () => {
         }
         );
     }
+
+    useEffect(async () => {
+        await isUserWorkingToday().then(isWorking => {
+            if (isWorking) {
+                alert("You are scheduled to work today. \nPlease complete your checkpoint.")
+                navigation.navigate("CovidCheckpoint")
+            }
+        });
+    }, []);
 
     //console.log(currentUserDoc)
 
