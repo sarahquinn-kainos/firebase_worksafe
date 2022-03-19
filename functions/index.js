@@ -10,38 +10,6 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send("Hello from Firebase!");
 });
 
-// exports.getUserWorkingToday = functions.https.onRequest(async (request, response) => {
-//     console.log("req: " + JSON.stringify(request))
-//     console.log("body: " + JSON.stringify(request.body))
-//     //console.log("query: " + request.query.data.uid)
-//     //console.log("params: " + request.params)
-//     //const uid = request.body.data.uid;
-//     var start = new Date();
-//     start.setUTCHours(0, 0, 0, 0);
-//     var end = new Date();
-//     end.setUTCHours(23, 59, 59, 999);
-//     console.log("start: " + start)
-//     console.log("end: " + end)
-//     response.send((request))
-//     // try {
-//     //     const snapshot = await admin.firestore().collection('WorkshiftSchedules')
-//     //         .where('date', '>=', start)
-//     //         .where('date', '<=', end)
-//     //         .where('staff_uids', 'array-contains', uid)
-//     //         .get().then(data => {
-//     //             return data
-//     //         })
-//     //     if (snapshot.empty){
-//     //         response.send(false)
-//     //     }else{
-//     //         response.send(true)
-//     //     }
-//     // } catch (err) {
-//     //     console.log(err)
-//     //     response.status(500).send(err)
-//     // }
-// });
-
 const addCovidNotification = (message => {
     return admin.firestore().collection('CovidNotifications')
         .add(message)
@@ -184,19 +152,28 @@ exports.onCovidNotificationCreated = functions.firestore
                 })
                 // add warnng to the shift doc too 
                 resultSnapshot.forEach((doc) =>{
+                    //const doc = document.data()
                     //store all alert messages for shift in array
                     var message_array = []
                     message_array.push(alert_message) // add current alert message to array
+
+                    // FIX THIS SECTION
                     // avoid overwriting higher level alert!
                     // if no existing alerts on shift - push new alert values 
-                    if (!(doc.hasOwnProperty("alert_level"))){
+                    console.log('doc')
+                    console.log(doc)
+                    console.log('alert')
+                    console.log(alert)
+                    console.log('doc.alert_level')
+                    console.log(doc.alert_level)
+                    if (!('alert_level' in doc)){
                         doc.ref.update({
                             "alert_level": alert_level,
                             "alert_message": message_array
                         })
                     }else{    
                          // get existing alert messages to append to array, if any exist
-                        if (doc.hasOwnProperty("alert_message")){
+                        if ('alert_message' in doc){
                             doc.alert_message.forEach((message) => {
                                 message_array.push(message)
                             })
