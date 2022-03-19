@@ -14,7 +14,7 @@ function displaySingleWorkshiftCard(data) {
         staff_array = d.staff;
         return (
             <>
-                <Card id={shift_id} style={{ width: 300 }}>
+                <Card id={shift_id} style={{ width: 300 }} mt={40}>
                     <Center>
                         <VStack>
                             <Center><Text> {date}</Text></Center>

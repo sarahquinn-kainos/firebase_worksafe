@@ -1,6 +1,6 @@
 import { getSingleDocByDocId } from '../Javascript/firestore';
 import React, { useState, useEffect } from 'react'
-import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input, HStack } from "native-base"
+import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input, HStack, ScrollView } from "native-base"
 import { useNavigation } from '@react-navigation/core'
 import { writeDocumentToCollection } from '../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,7 @@ function shiftFormScreen() {
 
     useEffect(async () => {
         try {
-            await AsyncStorage.getItem('current_shift_id').then((result)=>{
+            await AsyncStorage.getItem('current_shift_id').then((result) => {
                 if (result == undefined) {
                     setheader('Create New Shift')
                 } else {
@@ -50,17 +50,17 @@ function shiftFormScreen() {
         console.log(currentDocData)
     }, [currentDocData]);
 
-    const CurrentShift = () =>{
-        if(currentDocData
+    const CurrentShift = () => {
+        if (currentDocData
             && (Object.keys(currentDocData).length != 0
-            || Object.getPrototypeOf(currentDocData) != Object.prototype)){
+                || Object.getPrototypeOf(currentDocData) != Object.prototype)) {
             console.log(currentDocData)
             console.log('IF')
             return displaySingleWorkshiftCard(currentDocData)
-        }else{
+        } else {
             return null
         }
-        
+
     }
 
     async function submitShift() {
@@ -159,10 +159,10 @@ function shiftFormScreen() {
     const ShiftEntryForm = () => {
 
         return (
-            <VStack space={4} alignItems="center">
+            <VStack space={4} alignItems="center" mt={40} mb={20}>
                 <Center flex={1} px="3">
-                    {currentDocData ? <CurrentShift/>
-                     : null}
+                    {currentDocData ? <CurrentShift />
+                        : null}
                     <Text>{"\n"}</Text>
                     <Heading>{header ? header : null}</Heading>
                     <Text>{"\n"}</Text>
@@ -192,7 +192,9 @@ function shiftFormScreen() {
 
     return (
         <>
-            <ShiftEntryForm />
+            <ScrollView>
+                <ShiftEntryForm/>
+            </ScrollView>
         </>
     )
 

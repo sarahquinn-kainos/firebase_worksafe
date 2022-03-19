@@ -33,6 +33,21 @@ async function getUserDisplayName(documentID) {
     return full_name;
 }
 
+async function getUserIsAdmin(documentID) {
+    const user = auth.currentUser;
+    var result;
+    if (user) {
+        result = await getSingleDocByDocId('Users', documentID).then(function (response) {
+            return response
+        })
+    }
+    var account_type = result.account_type;
+    var isAdmin = false;
+    if (account_type == "admin" || account_type == "super_user"){
+        isAdmin = true;
+    }
+    return isAdmin;
+}
 
 
 async function getCovidDataForUserLastSevenDays(id) {
@@ -317,5 +332,6 @@ export {
     getShiftDataBetweenDates,
     getShiftDataBetweenDatesForUser,
     getUserDisplayName,
-    isUserWorkingToday
+    isUserWorkingToday,
+    getUserIsAdmin
 }

@@ -24,7 +24,7 @@ const ShiftInputForm = () => {
 
     return (
         <VStack space={4} alignItems="center">
-            {shiftFormScreen('OqODuwl8eHMPMK6jeM0j')}
+            {shiftFormScreen()}
         </VStack>
     )
 }
@@ -72,9 +72,9 @@ const shiftManageScreen = () => {
     
     return (
         <NativeBaseProvider>
-           { <Center flex={1} px="3">
+            <Center flex={1} px="3">
                <ShiftInputForm/>
-            </Center>}
+            </Center>
         </NativeBaseProvider>
     )
 
