@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/core'
 import { Text, Center, NativeBaseProvider, VStack, Button } from "native-base"
 import screenWithDrawerNav from '../components/drawerNav'
 import { isUserWorkingToday } from '../Javascript/firestore'
+import { useIsFocused } from '@react-navigation/native';
 
 const showVerifiedHomeScreenContent = () => {
     const [currentUserDoc, setCurrentUserDoc] = useState(null);
@@ -12,6 +13,7 @@ const showVerifiedHomeScreenContent = () => {
     const [displayName, setDisplayName] = useState('');
     const user = auth.currentUser;
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
 
     if (!currentUserDoc) {
         getSingleDocByDocId('Users', user.uid).then(result => {
@@ -30,7 +32,7 @@ const showVerifiedHomeScreenContent = () => {
                 navigation.navigate("CovidCheckpoint")
             }
         });
-    }, []);
+    }, [isFocused]);
 
     //console.log(currentUserDoc)
 
