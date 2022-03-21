@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, Flex, VStack, HStack, Center, NativeBaseProvider, Text, Spacer, Button, FormControl, Input, Divider, Modal, Radio } from "native-base"
-import { writeDocumentToCollection } from '../Javascript/firestore'
+import { getUserDisplayName, writeDocumentToCollection } from '../Javascript/firestore'
 import { auth } from '../firebase'
 import { useForm, Controller } from "react-hook-form";
 import { useNavigation } from '@react-navigation/core'
@@ -30,29 +30,34 @@ const CheckpointForm = () => {
         const booleanValue = new Map([
             ["1", true],
             ["0", false]
-          ]);
-          //include uid in the document
-        var formDataJSON = {
-            "user_display_name": user.displayName,
-            "uid": user.uid,
-            "timestamp": stamp,
-            "diagnosed": booleanValue.get(data.diagnosed),
-            "close_contact": booleanValue.get(data.close_contact),
-            "symptoms": booleanValue.get(data.symptoms),
-            "travelled": booleanValue.get(data.travelled),
-            "self_isolating": booleanValue.get(data.self_isolating)
-        }
+        ]);
 
         try {
-            //Update to write to main collection
-            writeDocumentToCollection('CovidCheckpoints' ,null, formDataJSON);
-            //DEV TEST getCovidDataForUserLastSevenDays(user.uid);
-        }
-        catch {
+            getUserDisplayName(user.uid).then(display_name => {
+                var formDataJSON = {
+                    "user_display_name": display_name,
+                    "uid": user.uid,
+                    "timestamp": stamp,
+                    "diagnosed": booleanValue.get(data.diagnosed),
+                    "close_contact": booleanValue.get(data.close_contact),
+                    "symptoms": booleanValue.get(data.symptoms),
+                    "travelled": booleanValue.get(data.travelled),
+                    "self_isolating": booleanValue.get(data.self_isolating)
+                }
+                try {
+                    writeDocumentToCollection('CovidCheckpoints', null, formDataJSON);
+                }
+                catch {
+                    (err) => {
+                        console.log(err)
+                    }
+                }
+            })
+        } catch {
             (err) => {
                 console.log(err)
             }
-        } 
+        }
         reset(); //reset form
         navigation.navigate("Login")
     }
