@@ -30,7 +30,6 @@ const collectIdsAndDocs = (doc) => {
     return { id: doc.id, ...doc.data() };
 };
 
-
 const getAdminUids = async () => {
     var id_array = []
     var result;
@@ -135,6 +134,38 @@ exports.onCovidCheckpointCreated = functions.firestore
         }
     })
 
+exports.onScheduleWarningCreated = functions.firestore
+    .document('ScheduleWarnings/{DocId}')
+    .onCreate(document => {
+        const doc = document.data();
+        var shift_dates = [];
+        var worker = doc.shift_warnings[0].positive_user_name;
+        var alert_level = doc.shift_warnings[0].alert_level;
+        var alert_message = doc.shift_warnings[0].alert_message;
+        doc.shift_warnings.forEach((warning) => {
+            var date = warning.shift_start.toDate().toLocaleString();
+            shift_dates.push(date);
+        })
+        var shift_dates_string = shift_dates.join(' | ')
+
+        // Send Email to alert Admin users 
+        getAdminUids().then((admins) => {
+            var email_content = {
+                toUids: admins,
+                template: {
+                    name: 'scheduleAlert',
+                    data: {
+                        worker_name: worker,
+                        alert_level: alert_level,
+                        alert_message: alert_message,
+                        affected_shifts: shift_dates_string
+                    }
+                }
+            }
+            sendEmail(email_content)
+        });
+    })
+
 exports.onCovidNotificationCreated = functions.firestore
     .document('CovidNotifications/{DocId}')
     .onCreate(async doc => {
@@ -159,15 +190,18 @@ exports.onCovidNotificationCreated = functions.firestore
         console.log("start: " + start)
         console.log("end: " + end)
 
+
+        var date_to_display = messageData.time.toDate().toLocaleString();
+
         // Send Email to alert Admin users 
-        getAdminUids().then((admins)=>{
+        getAdminUids().then((admins) => {
             var email_content = {
                 toUids: admins,
                 template: {
                     name: 'checkpointAlert',
                     data: {
                         worker_name: positive_user_display_name,
-                        time: messageData.time,
+                        time: date_to_display,
                         alert_level: alert_level,
                         alert_message: alert_message
                     }
@@ -294,7 +328,7 @@ exports.onCovidNotificationCreated = functions.firestore
                             name: 'closeContactAlert',
                             data: {
                                 worker_name: positive_user_display_name,
-                                date: messageData.time,
+                                date: date_to_display,
                             }
                         }
                     }
