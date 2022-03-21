@@ -30,11 +30,36 @@ const collectIdsAndDocs = (doc) => {
     return { id: doc.id, ...doc.data() };
 };
 
-const addCloseContactNotification = (message) => {
-    return admin.firestore().collection('CloseContactNotifications')
-        .add(message)
+
+const getAdminUids = async () => {
+    var id_array = []
+    var result;
+    try {
+        async function getDocument() {
+            const snapshot = await admin.firestore()
+                .collection('Users')
+                .where('account_type', 'in', ['admin', 'super_user'])
+                .get();
+            console.log(snapshot)
+            return snapshot
+        }
+        result = await getDocument().then(function (response) {
+            return response
+        })
+        result.forEach((doc) => {
+            id_array.push(doc.id)
+        })
+        return id_array;
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const sendEmail = (data) => {
+    return admin.firestore().collection('mail')
+        .add(data)
         .then(doc => {
-            console.log('Close Contact Warning added: ', doc)
+            console.log('E-mail pushed to mail collection: ', doc)
         })
 }
 
@@ -134,6 +159,24 @@ exports.onCovidNotificationCreated = functions.firestore
         console.log("start: " + start)
         console.log("end: " + end)
 
+        // Send Email to alert Admin users 
+        getAdminUids().then((admins)=>{
+            var email_content = {
+                toUids: admins,
+                template: {
+                    name: 'checkpointAlert',
+                    data: {
+                        worker_name: positive_user_display_name,
+                        time: messageData.time,
+                        alert_level: alert_level,
+                        alert_message: alert_message
+                    }
+                }
+            }
+            sendEmail(email_content)
+        });
+
+
         // CREATE SCHEDULE NOTIFICATIONS IN FIRESTORE 'SCHEDULEWARNINGS' COLLECTION
 
         try {
@@ -208,58 +251,59 @@ exports.onCovidNotificationCreated = functions.firestore
             response.status(500).send(err)
         }
 
-        if (messageData.title == "Positive COVID-19 Checkpoint"){
+        if (messageData.title == "Positive COVID-19 Checkpoint") {
             try {
-            // get workshift data from firestore with a snapshot - 5 days BEFORE checkpoint only
-            async function getDocumentPreviousDates() {
-                const snapshot = await admin.firestore()
-                    .collection('WorkshiftSchedules')
-                    .where('date', '>=', start)
-                    .where('date', '<=', checkpoint_date)
-                    .where('staff_uids', 'array-contains', positive_user_uid)
-                    .get();
-                console.log(snapshot)
-                return snapshot
-            }
-            //get firestore data for affected shifts
-            newResultSnapshot = await getDocumentPreviousDates().then(function (response) {
-                return response
-            })
-            // affected staff who have come into close contact on previous shifts (last 5 days) 
-            var affected_staff_array = []
-            newResultSnapshot.forEach((document) => {
-                const doc = document.data();
-                doc.staff_uids.forEach((id) => {
-                    if (id != positive_user_uid) { // avoid duplication of notification  
-                        affected_staff_array.push(id)
-                    }
+                // get workshift data from firestore with a snapshot - 5 days BEFORE checkpoint only
+                async function getDocumentPreviousDates() {
+                    const snapshot = await admin.firestore()
+                        .collection('WorkshiftSchedules')
+                        .where('date', '>=', start)
+                        .where('date', '<=', checkpoint_date)
+                        .where('staff_uids', 'array-contains', positive_user_uid)
+                        .get();
+                    console.log(snapshot)
+                    return snapshot
+                }
+                //get firestore data for affected shifts
+                newResultSnapshot = await getDocumentPreviousDates().then(function (response) {
+                    return response
                 })
-            })
-
-            function onlyUnique(value, index, self) {
-                return self.indexOf(value) === index;
-              }
-
-            // for every staff member in array - add notification to collection 
-            if (affected_staff_array.length > 0) {
-               
-                  var unique_ids = affected_staff_array.filter(onlyUnique);
-                  console.log("\n\nAffected staff (unique): " + unique_ids); 
-                  //let unique_ids = [new Set(affected_staff_array)]
-                  
-                  unique_ids.forEach((contact) => {
-                    var data = {
-                        staff_id: contact,
-                        positive_contact_id: positive_user_uid,
-                        date: checkpoint_date
-                    }
-                    addCloseContactNotification(data)
+                // affected staff who have come into close contact on previous shifts (last 5 days) 
+                var affected_staff_array = []
+                newResultSnapshot.forEach((document) => {
+                    const doc = document.data();
+                    doc.staff_uids.forEach((id) => {
+                        if (id != positive_user_uid) { // avoid duplication of notification  
+                            affected_staff_array.push(id)
+                        }
+                    })
                 })
+
+                function onlyUnique(value, index, self) {
+                    return self.indexOf(value) === index;
+                }
+
+                // for every staff member in array - add notification to collection 
+                if (affected_staff_array.length > 0) {
+
+                    var unique_ids = affected_staff_array.filter(onlyUnique);
+                    console.log("\n\nAffected staff (unique): " + unique_ids);
+                    var email_content = {
+                        toUids: unique_ids,
+                        template: {
+                            name: 'closeContactAlert',
+                            data: {
+                                worker_name: positive_user_display_name,
+                                date: messageData.time,
+                            }
+                        }
+                    }
+                    sendEmail(email_content)
+                }
+            } catch (err) {
+                console.log(err)
+                response.status(500).send(err)
             }
-        } catch (err) {
-            console.log(err)
-            response.status(500).send(err)
-        }
 
         }
     })
