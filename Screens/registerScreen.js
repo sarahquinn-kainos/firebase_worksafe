@@ -32,30 +32,53 @@ const registerScreen = () => {
         return unsubscribe
     }, [])
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function validatePassword(password) {
+        var minNumberofChars = 6;
+        var maxNumberofChars = 16;
+        var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+        if (!(password.length < minNumberofChars || password.length > maxNumberofChars)) {
+            if (!regularExpression.test(password)) {
+                alert("Password should contain at least one number and one special character.");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
+    }
+
     // create a new user in firebase 
     const handleSignUp = () => {
-        auth
-            .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
-                const displayName = fName;
-                const uid = userCredentials.user.uid;
-                if (userCredentials.user) {
-                    userCredentials.user.sendEmailVerification();
-                    userCredentials.user.updateProfile({
-                        displayName: displayName
-                    }).then(() => {
-                        var newUserDoc = {
-                            "account_type": "standard",
-                            "email": email,
-                            "first_name": fName,
-                            "surname": sName
-                        };
-                        writeDocumentToCollection('Users', uid, newUserDoc);
-                        navigation.navigate('Home');
-                        console.log(userCredentials.user.displayName)
-                    })
-                }
-            })
-            .catch(error => alert(error.message))
+        if (validatePassword(password)) {
+            auth
+                .createUserWithEmailAndPassword(email, password).then((userCredentials) => {
+                    const displayName = capitalizeFirstLetter(fName) + " " + capitalizeFirstLetter(sName);
+                    const uid = userCredentials.user.uid;
+                    if (userCredentials.user) {
+                        userCredentials.user.sendEmailVerification();
+                        userCredentials.user.updateProfile({
+                            displayName: displayName
+                        }).then(() => {
+                            var newUserDoc = {
+                                "account_type": "standard",
+                                "email": email,
+                                "first_name": capitalizeFirstLetter(fName),
+                                "surname": capitalizeFirstLetter(sName)
+                            };
+                            writeDocumentToCollection('Users', uid, newUserDoc);
+                            navigation.navigate('Home');
+                            console.log(userCredentials.user.displayName)
+                        })
+                    }
+                })
+                .catch(error => alert(error.message))
+        }
     }
 
     const backToLogin = () => {

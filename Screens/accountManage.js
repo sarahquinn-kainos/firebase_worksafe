@@ -77,7 +77,22 @@ export function AccountOptions() {
     )
 }
 
+function validatePassword(password) {
+    var minNumberofChars = 6;
+    var maxNumberofChars = 16;
+    var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    if (!(password.length < minNumberofChars || password.length > maxNumberofChars)) {
+        if (!regularExpression.test(password)) {
+            alert("Password should contain at least one number and one special character.");
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
 
+}
 
 
 export function NewPasswordModal() {
@@ -109,17 +124,20 @@ export function NewPasswordModal() {
     }
 
     const updatePassword = () => {
-        setShowModal(false)
+        //setShowModal(false)
         if (pass1 == pass2) { // passwords entered match?
-            auth.currentUser.updatePassword(pass1).then(() => {
-                alert("Your password has been updated.")
-                //reset input fields and close the modal window 
-                setPass1('');
-                setPass2('');
-                setShowModal(false);
-                setCurrentpass('');
-                setShowCurrentPassModal(false)
-            }).catch((err) => { alert(err) })  //errors from firebase Auth - e.g. password doesn't meet requirements 
+            if (validatePassword(pass1)){
+                auth.currentUser.updatePassword(pass1).then(() => {
+                    alert("Your password has been updated.")
+                    //reset input fields and close the modal window 
+                    setPass1('');
+                    setPass2('');
+                    setShowModal(false);
+                    setCurrentpass('');
+                    setShowCurrentPassModal(false)
+                }).catch((err) => { alert(err) })  //errors from firebase Auth - e.g. password doesn't meet requirements 
+
+            }
         }
         else {
             alert("Passwords do not match.")
