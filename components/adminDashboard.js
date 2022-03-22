@@ -120,13 +120,13 @@ function adminSummary() {
                 <Center mt={5}>
                     <Heading bold color="primary.800">My Reports</Heading>
                 </Center>
-                <Center w="64" h="12" bg="primary.400" rounded="md" shadow={3}>
+                <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
                     <Button variant="ghost" ><Text bold color="white">My Staff</Text></Button>
                 </Center>
-                <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
+                <Center w="64" h="12" bg="teal.500" rounded="md" shadow={3}>
                     <Button variant="ghost" ><Text bold color="white">COVID-19 - Staff Affected</Text></Button>
                 </Center>
-                <Center w="64" h="12" bg="primary.600" rounded="md" shadow={3}>
+                <Center w="64" h="12" bg="teal.600" rounded="md" shadow={3}>
                     <Button variant="ghost" ><Text bold color="white">COVID-19 - Guidelines</Text></Button>
                 </Center>
             </VStack>
