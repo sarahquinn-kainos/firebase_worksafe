@@ -102,6 +102,7 @@ async function getShiftDataBetweenDates(start, end) {
         async function getUserDocument() {
             const snapshot = await firestore
                 .collection('WorkshiftSchedules')
+                .orderBy("date", "asc")
                 .where('date', '>=', start)
                 .where('date', '<=', end)
                 .get();
@@ -141,6 +142,7 @@ async function getShiftDataBetweenDatesForUser(start, end, uid) {
         async function getDocument() {
             const snapshot = await firestore
                 .collection('WorkshiftSchedules')
+                .orderBy("date", "asc")
                 .where('date', '>=', start)
                 .where('date', '<=', end)
                 .where('staff_uids', 'array-contains', uid)
