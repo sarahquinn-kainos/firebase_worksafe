@@ -3,6 +3,11 @@ import { firestore } from '../firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+ // mapping for firestore object - returns a promise of multiple docs 
+ const collectIdsAndDocs = (doc) => {
+    return { id: doc.id, ...doc.data() };
+};
+
 async function getSingleDocByDocId(collection, documentID) {
     const user = auth.currentUser; // user is signed into app 
     var result;
@@ -43,7 +48,7 @@ async function getUserIsAdmin(documentID) {
     }
     var account_type = result.account_type;
     var isAdmin = false;
-    if (account_type == "admin" || account_type == "super_user"){
+    if (account_type == "admin" || account_type == "super_user") {
         isAdmin = true;
     }
     return isAdmin;
@@ -58,11 +63,6 @@ async function getCovidDataForUserLastSevenDays(id) {
     start.setDate(start.getDate() - 7);
     start = start.toISOString();
     console.log(start, end)
-
-    // mapping for firestore object - returns a promise of multiple docs 
-    const collectIdsAndDocs = (doc) => {
-        return { id: doc.id, ...doc.data() };
-    };
 
     if (id) {
         // get data from firestore with a snapshot 
@@ -87,11 +87,6 @@ async function getCovidDataForUserLastSevenDays(id) {
 
 async function getShiftDataBetweenDates(start, end) {
     var result;
-
-    // mapping for firestore object - returns a promise of multiple docs 
-    const collectIdsAndDocs = (doc) => {
-        return { id: doc.id, ...doc.data() };
-    };
 
     // The Firestore documentation mentions in its “Query limitations” section:
     // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
@@ -125,11 +120,6 @@ async function getShiftDataBetweenDates(start, end) {
 async function getShiftDataBetweenDatesForUser(start, end, uid) {
     var result;
     console.log(start + " \n" + end + " \n" + uid)
-
-    // mapping for firestore object - returns a promise of multiple docs 
-    const collectIdsAndDocs = (doc) => {
-        return { id: doc.id, ...doc.data() };
-    };
 
     // The Firestore documentation mentions in its “Query limitations” section:
     // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
@@ -242,11 +232,6 @@ async function getUsersCollection() {
     const user = auth.currentUser;
     var result;
 
-    // mapping for firestore object - returns a promise of multiple docs 
-    const collectIdsAndDocs = (doc) => {
-        return { id: doc.id, ...doc.data() };
-    };
-
     if (user) {
         // get data from firestore with a snapshot 
         const getUserDocument = async () => {
@@ -257,6 +242,27 @@ async function getUsersCollection() {
         }
         result = await getUserDocument().then(function (response) {
             return response;
+        })
+    }
+    return result;
+}
+
+
+async function getStaffCount() {
+    const user = auth.currentUser;
+    var result;
+
+    if (user) {
+        // get data from firestore with a snapshot 
+        const getUserDocument = async () => {
+            const snapshot = await firestore
+                .collection('Users')
+                .where("account_type", "==", "standard")
+                .get();
+            return (snapshot)
+        }
+        result = await getUserDocument().then(function (response) {
+            return response.size;
         })
     }
     return result;
@@ -335,5 +341,6 @@ export {
     getShiftDataBetweenDatesForUser,
     getUserDisplayName,
     isUserWorkingToday,
-    getUserIsAdmin
+    getUserIsAdmin,
+    getStaffCount
 }
