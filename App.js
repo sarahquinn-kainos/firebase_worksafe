@@ -4,7 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import loginScreen from './Screens/loginScreen';
 import homeScreen from './Screens/homeScreen';
-import adminDashboard from './Screens/adminDashboard';
+import adminDashboard from './Screens/adminHome';
 import registerScreen from './Screens/registerScreen';
 import forgotPassword from './Screens/forgotPassword';
 import accountManageScreen from './Screens/accountManage';
