@@ -61,7 +61,6 @@ const showVerifiedHomeScreenContent = () => {
                     <Text>{"\n"}</Text>
                     <Divider />
                     <Text>{"\n"}</Text>
-                    {/* <Card  w="100%"></Card> */}
                     {userScheduleSummary()}
                     
                 </Center>

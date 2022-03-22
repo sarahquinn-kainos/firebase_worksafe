@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { getShiftDataBetweenDatesForUser } from '../Javascript/firestore';
 import { auth } from '../firebase';
-import { Card, Center, Text, VStack, HStack, Button, Spinner, Flex, Spacer, Box, Circle, Divider, Heading } from 'native-base';
+import { Center, Text, VStack, HStack, Spinner, Box, Circle, Divider, Heading } from 'native-base';
 import displaySingleWorkshiftCard from './singleWorkshiftCard';
 
 function userScheduleSummary() {
@@ -69,7 +68,7 @@ function userScheduleSummary() {
         //console.log(currentInfo)
         return (
             <>
-            <Heading color="primary.800" pb={5}>Weekly Summary</Heading>
+            <Heading color="primary.800" pb={5}>My Week</Heading>
                 {summaryData ?
                     <VStack>
                         <HStack>
