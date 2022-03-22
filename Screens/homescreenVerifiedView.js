@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { auth } from '../firebase'
 import { getSingleDocByDocId } from '../Javascript/firestore'
 import { useNavigation } from '@react-navigation/core'
-import { Text, Center, NativeBaseProvider, VStack, Button, Divider, HStack, Card } from "native-base"
+import { Text, Center, NativeBaseProvider, VStack, Button, Divider, HStack, Card, Image } from "native-base"
 import screenWithDrawerNav from '../components/drawerNav'
 import { isUserWorkingToday } from '../Javascript/firestore'
 import { useIsFocused } from '@react-navigation/native';
@@ -15,7 +15,7 @@ const showVerifiedHomeScreenContent = () => {
     const user = auth.currentUser;
     const navigation = useNavigation();
     const isFocused = useIsFocused();
-
+    var logo = require("../media/logo.png")
 
 
 
@@ -38,31 +38,33 @@ const showVerifiedHomeScreenContent = () => {
         });
     }, [isFocused]);
 
-    
+
 
     return (
         <NativeBaseProvider>
 
             <VStack space={4} alignItems="center">
                 <Center mx="auto" w="95%" px="45" py="30" >
+                    {logo ?
+                        <Image size={100} resizeMode={"contain"} borderRadius={100} source={logo} alt="WorkSafe" />
+                        : null}
+                    <Text>{"\n"}</Text>
                     <Text bold>Hello {displayName}!</Text>
                     <Text>{"\n"}</Text>
                     <Divider />
                     <Text>{"\n"}</Text>
                     <HStack>
-                    <Text bold textAlign="center">Verified Email: </Text>
-                    <Text>{email}</Text>
+                        <Text bold textAlign="center">Verified Email: </Text>
+                        <Text>{email}</Text>
                     </HStack>
                     <Text>{"\n"}</Text>
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('Manage User Schedule') }}>
-                        <Text bold color="white">Manage My Schedule</Text>
+                        <Text bold color="white">My Schedule</Text>
                     </Button>
                     <Text>{"\n"}</Text>
-                    <Divider />
-                    <Text>{"\n"}</Text>
                     {userScheduleSummary()}
-                    
+
                 </Center>
             </VStack>
         </NativeBaseProvider>

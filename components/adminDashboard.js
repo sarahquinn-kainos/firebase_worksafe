@@ -48,8 +48,10 @@ function adminSummary() {
                 shiftsThisWeek += 1; // add to shift counter
                 var start = doc.start_datetime.toDate()
                 var end = doc.end_datetime.toDate()
+                var staff_assigned = doc.staff_uids.length
+                console.log(staff_assigned) // count staff on shift - multiply by hours of shift for total hours
                 var hours = Math.abs(end - start) / 36e5; // find difference in hours between dates
-                hoursThisWeek += hours; // add to total weekly hours counter
+                hoursThisWeek += (hours * staff_assigned); // add to total weekly hours counter
             })
             await getStaffCount().then((count) => {
                 var staff_count = count;

@@ -14,7 +14,6 @@ const adminHome = () => {
     // current user's account vlaues 
     const user = auth.currentUser;
     const email = user.email
-    const displayName = user.displayName
     var logo = require("../media/logo.png")
     return (
         <VStack space={4} alignItems="center">
