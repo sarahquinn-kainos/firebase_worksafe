@@ -1,4 +1,4 @@
-import { Card, Center, Text, VStack, HStack, Button, Spinner } from 'native-base';
+import { Card, Center, Text, VStack, HStack, Button, Spinner, WarningTwoIcon, Modal, Divider } from 'native-base';
 import { getShiftDataBetweenDates } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,8 @@ function workshiftCardsAdminView() {
     const isAdmin = true;
     const [currentInfo, setcurrentInfo] = useState("");
     const [fetched, setFetched] = useState(false)
+    const [showAlerts, setShowAlerts] = useState(false);
+    const [alertData, setAlertData] = useState([]);
     const navigator = useNavigation();
     const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
     //use this const to trigger a refresh of the data
@@ -19,19 +21,19 @@ function workshiftCardsAdminView() {
         // get the params passed into storage via the modal on prvious screen 
         var params = await AsyncStorage.getItem('show_shifts_params').then((result) => {
             console.log("result from async = " + result)
-            if (result){
+            if (result) {
                 return JSON.parse(result)
-            }else{
+            } else {
                 return null
-            } 
+            }
         })
-        if (params != null){
+        if (params != null) {
             var start = new Date(params.query_date)
             var weekIncrement = Number(params.query_weeks);
             var end = new Date(params.query_date)
             end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
             return [start, end]
-        }else{
+        } else {
             return [null, null]
         }
     }
@@ -50,11 +52,11 @@ function workshiftCardsAdminView() {
     }
 
     useEffect(async () => {
-        
+
         var [start, end] = await getParams()
         console.log(start)
         console.log(end)
-        if (start != null && end != null){
+        if (start != null && end != null) {
             await getCurrentInfo(start, end).then((data) => {
                 setcurrentInfo(data)
                 setFetched(true)
@@ -69,6 +71,50 @@ function workshiftCardsAdminView() {
         }
     }, [fetched]);
 
+    const viewAlerts = (alerts) => {
+        setAlertData(alerts);
+        setShowAlerts(true);
+    }
+
+    const AlertModal = () => {
+        console.log(alertData)
+        var alerts_to_display = alertData;
+        return (
+            <Center>
+                <Modal isOpen={showAlerts} onClose={() => setShowAlerts(false)}>
+                    <Modal.Content maxWidth="400px">
+                        <Modal.CloseButton />
+                        <Modal.Header>Alerts</Modal.Header>
+                        <Modal.Body>
+                            <VStack>
+                                {alertData ?
+                                    alertData.map((alert, index) => {
+                                        return (
+                                            <VStack py={3}>
+
+                                                <HStack pb={2}>
+                                                    <WarningTwoIcon size="sm" />
+                                                    <Text bold>   {alert.alert_level}</Text>
+                                                </HStack>
+                                                <Center>
+                                                    <Text>{alert.alert_message}</Text>
+                                                    <Divider />
+                                                </Center>
+                                            </VStack>
+                                        )
+                                    })
+                                    : null}
+
+                            </VStack>
+                        </Modal.Body>
+                    </Modal.Content>
+                </Modal>
+            </Center>
+        )
+    }
+
+
+
 
 
     if (isAdmin) {
@@ -76,7 +122,7 @@ function workshiftCardsAdminView() {
         return (
             <Center>
                 <VStack mt="4">
-
+                    <AlertModal />
                     {currentInfo ?
                         currentInfo.map((d, index) => {
                             var alerts = new Array;
@@ -88,41 +134,55 @@ function workshiftCardsAdminView() {
                             staff_array = d.staff;
                             var shift_id = d.id
                             var card_colour = "black";
-                            //alerts for cards
-                            // var alert_high = alerts.find((alert) => {
-                            //     if (alert.alert_level == 'high') {
-                            //         return true;
-                            //     }
-                            // })
-                            // var alert_medium = alerts.find((alert) => {
-                            //     if (alert.alert_level == 'medium') {
-                            //         return true;
-                            //     }
-                            // })
-                            // var alert_low = alerts.find((alert) => {
-                            //     if (alert.alert_level == 'low') {
-                            //         return true;
-                            //     }
-                            // })
-                            // if (alert_high) {
-                            //     card_colour = "red"
-                            // } else {
-                            //     if (alert_medium) {
-                            //         card_colour = "orange"
-                            //     } else {
-                            //         if (alert_low) {
-                            //             card_colour = "yellow"
-                            //         }
-                            //     }
-                            // }
-                            // console.log(card_colour)
-                            console.log(alerts)
+                            //if any alerts present on the current shift
+                            if (alerts) {
+                                //alerts for cards
+                                var alert_high = alerts.find((alert) => {
+                                    if (alert.alert_level == 'high') {
+                                        return true;
+                                    }
+                                })
+                                var alert_medium = alerts.find((alert) => {
+                                    if (alert.alert_level == 'medium') {
+                                        return true;
+                                    }
+                                })
+                                var alert_low = alerts.find((alert) => {
+                                    if (alert.alert_level == 'low') {
+                                        return true;
+                                    }
+                                })
+                                if (alert_high) {
+                                    card_colour = "red.600"
+                                } else {
+                                    if (alert_medium) {
+                                        card_colour = "warning.500"
+                                    } else {
+                                        if (alert_low) {
+                                            card_colour = "yellow.500"
+                                        }
+                                    }
+                                }
+                            }
 
 
                             return (
                                 <>
                                     <Card id={shift_id} style={{ width: 300 }}>
                                         <Center>
+                                            {(card_colour != 'black') ?
+                                                <>
+                                                    <Button onPress={() => {
+                                                        viewAlerts(alerts)
+                                                    }} size="sm" variant="outline" colorScheme="secondary">
+                                                        <HStack>
+                                                            <WarningTwoIcon color={card_colour} />
+                                                            <Text>View Alerts</Text>
+                                                        </HStack>
+                                                    </Button>
+                                                    <Text>{"\n"}</Text></>
+                                                :
+                                                null}
                                             <VStack>
                                                 <Center><Text> {date}</Text></Center>
                                                 <HStack pt="1">
