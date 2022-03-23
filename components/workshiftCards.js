@@ -78,7 +78,6 @@ function workshiftCardsAdminView() {
 
     const AlertModal = () => {
         console.log(alertData)
-        var alerts_to_display = alertData;
         return (
             <Center>
                 <Modal isOpen={showAlerts} onClose={() => setShowAlerts(false)}>

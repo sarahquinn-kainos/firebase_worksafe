@@ -102,7 +102,7 @@ function userScheduleSummary() {
                 <Divider mt={5}/>
                 <Center mt={5}>
                     <Text bold  color="primary.800">Next Scheduled Shift</Text>
-                    <Box mt={-40}>
+                    <Box mt={-80}>
                         {nextShiftData ?
                             displaySingleWorkshiftCard(nextShiftData)
                             :

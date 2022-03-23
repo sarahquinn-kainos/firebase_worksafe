@@ -58,12 +58,13 @@ const showVerifiedHomeScreenContent = () => {
                         <Text>{email}</Text>
                     </HStack>
                     <Text>{"\n"}</Text>
+                    <Text>{"\n"}</Text>
+                    {userScheduleSummary()}
+
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('Manage User Schedule') }}>
                         <Text bold color="white">My Schedule</Text>
                     </Button>
-                    <Text>{"\n"}</Text>
-                    {userScheduleSummary()}
 
                 </Center>
             </VStack>

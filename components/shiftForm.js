@@ -1,6 +1,6 @@
 import { getSingleDocByDocId } from '../Javascript/firestore';
 import React, { useState, useEffect } from 'react'
-import { Modal, VStack, Center, Heading, NativeBaseProvider, Text, Box, Button, FormControl, Input, HStack, ScrollView } from "native-base"
+import { Modal, VStack, Center, Heading, Text, Button, HStack, ScrollView, WarningTwoIcon, Divider } from "native-base"
 import { useNavigation } from '@react-navigation/core'
 import { writeDocumentToCollection } from '../Javascript/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,6 +16,8 @@ function shiftFormScreen() {
     const [docID, setDocID] = useState('')
     const [header, setheader] = useState('')
     const navigator = useNavigation();
+    const [showAlerts, setShowAlerts] = useState(false);
+    const [alertData, setAlertData] = useState([]);
 
     useEffect(async () => {
         try {
@@ -38,6 +40,11 @@ function shiftFormScreen() {
             try {
                 await getSingleDocByDocId('WorkshiftSchedules', docID).then((data) => {
                     setCurrentDocData(data)
+                    var alerts = data.alerts;
+                    if (alerts) {
+                        console.log(alerts)
+                        setAlertData(alerts);
+                    }
                 })
             } catch (err) {
                 console.log(err)
@@ -50,12 +57,56 @@ function shiftFormScreen() {
         console.log(currentDocData)
     }, [currentDocData]);
 
+    useEffect(async () => {
+        console.log(alertData)
+    }, [alertData]);
+
+    const viewAlerts = () => {
+        setShowAlerts(true);
+    }
+
+    const AlertModal = () => {
+        console.log(alertData)
+        return (
+            <Center>
+                <Modal isOpen={showAlerts} onClose={() => setShowAlerts(false)}>
+                    <Modal.Content maxWidth="400px">
+                        <Modal.CloseButton />
+                        <Modal.Header>Alerts</Modal.Header>
+                        <Modal.Body>
+                            <VStack>
+                                {alertData ?
+                                    alertData.map((alert, index) => {
+                                        return (
+                                            <VStack py={3}>
+
+                                                <HStack pb={2}>
+                                                    <WarningTwoIcon size="sm" />
+                                                    <Text bold>   {alert.alert_level}</Text>
+                                                </HStack>
+                                                <Center>
+                                                    <Text>{alert.alert_message}</Text>
+                                                    <Divider />
+                                                </Center>
+                                            </VStack>
+                                        )
+                                    })
+                                    : null}
+
+                            </VStack>
+                        </Modal.Body>
+                    </Modal.Content>
+                </Modal>
+            </Center>
+        )
+    }
+
     const CurrentShift = () => {
         if (currentDocData
             && (Object.keys(currentDocData).length != 0
                 || Object.getPrototypeOf(currentDocData) != Object.prototype)) {
             console.log(currentDocData)
-            console.log('IF')
+            console.log(currentDocData.alerts)
             return displaySingleWorkshiftCard(currentDocData)
         } else {
             return null
@@ -164,6 +215,18 @@ function shiftFormScreen() {
                     {currentDocData ? <CurrentShift />
                         : null}
                     <Text>{"\n"}</Text>
+                    {alertData.length> 0 ?
+                        <>
+                            <AlertModal />
+                            <Button onPress={() => {
+                                viewAlerts()
+                            }} size="sm" variant="outline" colorScheme="secondary">
+                                <HStack>
+                                    <Text>View Alerts</Text>
+                                </HStack>
+                            </Button>
+                            <Text>{"\n"}</Text>
+                        </> : null}
                     <Heading>{header ? header : null}</Heading>
                     <Text>{"\n"}</Text>
                     <VStack>
@@ -193,7 +256,7 @@ function shiftFormScreen() {
     return (
         <>
             <ScrollView>
-                <ShiftEntryForm/>
+                <ShiftEntryForm />
             </ScrollView>
         </>
     )
