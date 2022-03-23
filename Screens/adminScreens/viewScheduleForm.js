@@ -31,7 +31,7 @@ const selectShifts = () => {
             viewFromDate = response;
         })
         try {
-            if (viewFromDate != null) {
+            if (viewFromDate != null && weeks!=null) {
                 request = {
                     "query_date": viewFromDate,
                     "query_weeks": weeks

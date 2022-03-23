@@ -13,27 +13,31 @@ function workshiftCardsAdminView() {
     const [fetched, setFetched] = useState(false)
     const navigator = useNavigation();
     const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
-                                      //use this const to trigger a refresh of the data
+    //use this const to trigger a refresh of the data
 
-    async function getParams(){
+    async function getParams() {
         // get the params passed into storage via the modal on prvious screen 
         var params = await AsyncStorage.getItem('show_shifts_params').then((result) => {
             console.log("result from async = " + result)
-            return JSON.parse(result);
+            if (result){
+                return JSON.parse(result)
+            }else{
+                return null
+            } 
         })
-        var start = new Date (params.query_date)
-        var weekIncrement = Number(params.query_weeks);
-        var end = new Date(params.query_date)
-        end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
-        return [start, end]
+        if (params != null){
+            var start = new Date(params.query_date)
+            var weekIncrement = Number(params.query_weeks);
+            var end = new Date(params.query_date)
+            end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
+            return [start, end]
+        }else{
+            return [null, null]
+        }
     }
 
-    async function getCurrentInfo() {
-        var [start, end] = await getParams()
-        console.log(start)
-        console.log(end)
-
-        var data = await getShiftDataBetweenDates(start , end ).then((result) => {
+    async function getCurrentInfo(start, end) {
+        var data = await getShiftDataBetweenDates(start, end).then((result) => {
             return (result)
         })
         return data;
@@ -46,20 +50,26 @@ function workshiftCardsAdminView() {
     }
 
     useEffect(async () => {
-        await getCurrentInfo().then((data) => {
-            setcurrentInfo(data)
-            setFetched(true)
-        })
+        
+        var [start, end] = await getParams()
+        console.log(start)
+        console.log(end)
+        if (start != null && end != null){
+            await getCurrentInfo(start, end).then((data) => {
+                setcurrentInfo(data)
+                setFetched(true)
+            })
+        }
     }, [isFocused]);
 
     useEffect(async () => {
-            if (currentInfo.length == 0 && fetched){
-                alert("No shifts exist for dates selected.")
-                navigator.navigate('Manage Schedule')
-            }
+        if (currentInfo.length == 0 && fetched) {
+            alert("No shifts exist for dates selected.")
+            navigator.navigate('Manage Schedule')
+        }
     }, [fetched]);
 
-    
+
 
     if (isAdmin) {
         console.log(currentInfo)
@@ -69,12 +79,44 @@ function workshiftCardsAdminView() {
 
                     {currentInfo ?
                         currentInfo.map((d, index) => {
+                            var alerts = new Array;
+                            alerts = d.alerts;
                             var date = d.date.toDate().toLocaleDateString();
                             var startTime = d.start_datetime.toDate().toLocaleTimeString('en-gb')
                             var endTime = d.end_datetime.toDate().toLocaleTimeString('en-gb')
                             var staff_array = new Array;
-                            var shift_id = d.id
                             staff_array = d.staff;
+                            var shift_id = d.id
+                            var card_colour = "black";
+                            //alerts for cards
+                            // var alert_high = alerts.find((alert) => {
+                            //     if (alert.alert_level == 'high') {
+                            //         return true;
+                            //     }
+                            // })
+                            // var alert_medium = alerts.find((alert) => {
+                            //     if (alert.alert_level == 'medium') {
+                            //         return true;
+                            //     }
+                            // })
+                            // var alert_low = alerts.find((alert) => {
+                            //     if (alert.alert_level == 'low') {
+                            //         return true;
+                            //     }
+                            // })
+                            // if (alert_high) {
+                            //     card_colour = "red"
+                            // } else {
+                            //     if (alert_medium) {
+                            //         card_colour = "orange"
+                            //     } else {
+                            //         if (alert_low) {
+                            //             card_colour = "yellow"
+                            //         }
+                            //     }
+                            // }
+                            // console.log(card_colour)
+                            console.log(alerts)
 
 
                             return (
@@ -109,8 +151,9 @@ function workshiftCardsAdminView() {
                                                     </VStack>
                                                     <Text>{"\n"}</Text>
                                                     <Button small transparent onPress={() => {
-                                                        editShift(shift_id)}
-                                                        }>Edit</Button>
+                                                        editShift(shift_id)
+                                                    }
+                                                    }>Edit</Button>
                                                 </VStack>
                                             </VStack>
                                         </Center>
@@ -119,7 +162,7 @@ function workshiftCardsAdminView() {
                                     <Text>{"\n"}</Text>
                                 </>
                             )
-                        }) : <Spinner/>}
+                        }) : <Spinner />}
                 </VStack>
             </Center>
         );
