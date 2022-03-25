@@ -107,7 +107,7 @@ function viewStaffDetails() {
                             var full_name = d.first_name + " " + d.surname;
                             return (
                                 <>
-                                    <Button link onPress={() => { showDetails(uid) }}>
+                                    <Button w={300} variant={'outline'} onPress={() => { showDetails(uid) }}>
                                         <Text>{full_name}</Text>
                                     </Button>
                                     <Text>{"\n"}</Text>
