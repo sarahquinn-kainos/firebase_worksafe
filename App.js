@@ -41,7 +41,7 @@ function StackNav() {
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
     <Stack.Screen name="VerifiedHome" component={showVerifiedHome} options={{ headerShown: false }} />
     <Stack.Screen name="UnverifiedHome" component={showUnerifiedHome} options={{ headerShown: false }} />
-    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
+    <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} options={{ headerTitle: "My Contact Details", headerTitleAlign: 'center' }} />
     <Stack.Screen name="Select Shifts" component={selectShifts} options={{headerBackTitleVisible: true }} />
     <Stack.Screen name="View Schedule" component={viewSchedule} options={{headerBackTitleVisible: true }} />
     <Stack.Screen name="View Staff Contact Details" component={viewStaffDetails} options={{headerBackTitleVisible: true }} />

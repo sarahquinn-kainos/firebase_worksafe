@@ -64,7 +64,7 @@ export function AccountOptions() {
                 <NewPasswordModal />
             </Center>
             <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
-                <Button variant="ghost" onPress={() => { navigation.navigate('UserContactInfo') }}><Text bold color="white">Maintain My Contact Info</Text></Button>
+                <Button variant="ghost" onPress={() => { navigation.navigate('UserContactInfo') }}><Text bold color="white">Maintain My Contact Details</Text></Button>
             </Center>
             <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
                 <Button variant="ghost" onPress={() => setShowLogoutModal(true)}><Text bold color="white">Logout</Text></Button>
