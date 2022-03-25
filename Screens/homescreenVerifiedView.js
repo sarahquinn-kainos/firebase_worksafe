@@ -58,14 +58,16 @@ const showVerifiedHomeScreenContent = () => {
                         <Text>{email}</Text>
                     </HStack>
                     <Text>{"\n"}</Text>
+                    <Button minW={"100%"}
+                        onPress={() => { navigation.navigate('CovidCheckpoint') }}>
+                        <Text bold color="white">Record COVID-19 Checkpoint</Text>
+                    </Button>
                     <Text>{"\n"}</Text>
                     {userScheduleSummary()}
-
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('Manage User Schedule') }}>
                         <Text bold color="white">My Schedule</Text>
                     </Button>
-
                 </Center>
             </VStack>
         </NativeBaseProvider>
