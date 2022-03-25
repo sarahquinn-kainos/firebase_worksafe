@@ -4,15 +4,15 @@ import { NativeBaseProvider, Button, Text, Center } from "native-base";
 import screenWithDrawerNav from '../../components/drawerNav';
 import workshiftCardsAdminView from '../../components/workshiftCards';
 
-const ViewScheduleHome = () => {
+const ViewScheduleAlertsHome = () => {
     return (
     <Center>
-       {workshiftCardsAdminView(false)}
+       {workshiftCardsAdminView(true)}
     </Center>
     )
 }
 
-const viewSchedule = () => {
+const viewScheduleAlerts = () => {
 
     const user = auth.currentUser;
     if (user) {
@@ -20,11 +20,11 @@ const viewSchedule = () => {
         return (
             <NativeBaseProvider>
                 {/* this function creates the screen we have defined above with a drawer navigation. */}
-                <ViewScheduleHome/>
+                <ViewScheduleAlertsHome/>
             </NativeBaseProvider>
         )
     }
 
 }
 
-export default viewSchedule
+export default viewScheduleAlerts

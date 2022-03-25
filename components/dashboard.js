@@ -49,18 +49,20 @@ function userScheduleSummary() {
             setFetched(true)
             var hoursThisWeek = 0;
             var shiftsThisWeek = 0;
-            data.forEach((doc) => {
-                shiftsThisWeek += 1; // add to shift counter
-                var start = doc.start_datetime.toDate()
-                var end = doc.end_datetime.toDate()
-                var hours = Math.abs(end - start) / 36e5; // find difference in hours between dates
-                hoursThisWeek += hours; // add to total weekly hours counter
-            })
+            if (data.length > 0) {
+                data.forEach((doc) => {
+                    shiftsThisWeek += 1; // add to shift counter
+                    var start = doc.start_datetime.toDate()
+                    var end = doc.end_datetime.toDate()
+                    var hours = Math.abs(end - start) / 36e5; // find difference in hours between dates
+                    hoursThisWeek += hours; // add to total weekly hours counter
+                })
+                setNextShiftData(data[0])
+            }
             setSummaryData({
                 hours: hoursThisWeek,
                 shifts: shiftsThisWeek
             })
-            setNextShiftData(data[0])
         })
     }, [isFocused]);
 
@@ -68,7 +70,7 @@ function userScheduleSummary() {
         //console.log(currentInfo)
         return (
             <>
-            <Heading color="primary.800" pb={5}>My Week</Heading>
+                <Heading color="primary.800" pb={5}>My Week</Heading>
                 {summaryData ?
                     <VStack>
                         <HStack>
@@ -99,14 +101,17 @@ function userScheduleSummary() {
                         </HStack>
                     </VStack>
                     : <Spinner />}
-                <Divider mt={5}/>
+                <Divider mt={5} />
                 <Center mt={5}>
-                    <Text bold  color="primary.800">Next Scheduled Shift</Text>
+                    {nextShiftData ?
+                        <Text bold color="primary.800">Next Scheduled Shift</Text>
+                        :
+                        null}
                     <Box mt={-80}>
                         {nextShiftData ?
                             displaySingleWorkshiftCard(nextShiftData)
                             :
-                            <Spinner />}
+                            null}
                     </Box>
                 </Center>
             </>

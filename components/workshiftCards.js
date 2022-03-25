@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
 
-function workshiftCardsAdminView() {
+function workshiftCardsAdminView(alertsOnlyFlag) {
 
     const isAdmin = true;
     const [currentInfo, setcurrentInfo] = useState("");
@@ -18,28 +18,32 @@ function workshiftCardsAdminView() {
     //use this const to trigger a refresh of the data
 
     async function getParams() {
-        // get the params passed into storage via the modal on prvious screen 
-        var params = await AsyncStorage.getItem('show_shifts_params').then((result) => {
-            console.log("result from async = " + result)
-            if (result) {
-                return JSON.parse(result)
-            } else {
-                return null
-            }
-        })
-        if (params != null) {
-            var start = new Date(params.query_date)
-            var weekIncrement = Number(params.query_weeks);
-            var end = new Date(params.query_date)
-            end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
-            return [start, end]
-        } else {
+        if (alertsOnlyFlag) {
             return [null, null]
+        } else {
+            // get the params passed into storage via the modal on prvious screen 
+            var params = await AsyncStorage.getItem('show_shifts_params').then((result) => {
+                console.log("result from async = " + result)
+                if (result) {
+                    return JSON.parse(result)
+                } else {
+                    return null
+                }
+            })
+            if (params != null) {
+                var start = new Date(params.query_date)
+                var weekIncrement = Number(params.query_weeks);
+                var end = new Date(params.query_date)
+                end.setDate(end.getDate() + (weekIncrement * 7)) // add number of weeks to start date for end date
+                return [start, end]
+            } else {
+                return [null, null]
+            }
         }
     }
 
     async function getCurrentInfo(start, end) {
-        var data = await getShiftDataBetweenDates(start, end).then((result) => {
+        var data = await getShiftDataBetweenDates(start, end, alertsOnlyFlag).then((result) => {
             return (result)
         })
         return data;
@@ -52,16 +56,14 @@ function workshiftCardsAdminView() {
     }
 
     useEffect(async () => {
-
+        // add logic for alerts only 
         var [start, end] = await getParams()
         console.log(start)
         console.log(end)
-        if (start != null && end != null) {
             await getCurrentInfo(start, end).then((data) => {
                 setcurrentInfo(data)
                 setFetched(true)
             })
-        }
     }, [isFocused]);
 
     useEffect(async () => {

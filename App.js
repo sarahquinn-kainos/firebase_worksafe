@@ -20,6 +20,7 @@ import scheduleManageScreen from './Screens/adminScreens/manageSchedules';
 import manageUserSchedule from './Screens/manageUserSchedules';
 import viewScheduleForuser from './Screens/viewScheduleForUser';
 import selectShifts from './Screens/adminScreens/viewScheduleForm';
+import viewScheduleAlerts from './Screens/adminScreens/viewScheduleWithAlertsOnly';
 
 
 const Stack = createNativeStackNavigator();
@@ -42,6 +43,7 @@ function StackNav() {
     <Stack.Screen name="UserContactInfo" component={userContactInfoScreen} />
     <Stack.Screen name="Select Shifts" component={selectShifts} options={{headerBackTitleVisible: true }} />
     <Stack.Screen name="View Schedule" component={viewSchedule} options={{headerBackTitleVisible: true }} />
+    <Stack.Screen name="View Schedule Alerts" component={viewScheduleAlerts} options={{headerBackTitleVisible: true }} />
     <Stack.Screen name="Manage Schedule" component={scheduleManageScreen} options={{ headerBackTitle: false , headerBackTitleVisible: true}} />
     <Stack.Screen name="Manage Shifts" component={shiftManageScreen} options={{ headerShown: true , headerBackTitleVisible: true}} />
     <Stack.Screen name="View User Schedule" component={viewScheduleForuser} options={{ headerTitle: "My Schedule", headerShown: true , headerBackTitleVisible: true}} />

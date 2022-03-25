@@ -29,6 +29,9 @@ function scheduleManageOptions() {
                 <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
                     <Button variant="ghost" onPress={() => { navigation.navigate('Select Shifts') }}><Text bold color="white">View Schedule</Text></Button>
                 </Center>
+                <Center w="64" h="12" bg="primary.500" rounded="md" shadow={3}>
+                    <Button variant="ghost" onPress={() => { navigation.navigate('View Schedule Alerts') }}><Text bold color="white">View Schedule Alerts</Text></Button>
+                </Center>
             </VStack>
         )
     }

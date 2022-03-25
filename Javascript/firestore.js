@@ -3,8 +3,8 @@ import { firestore } from '../firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
- // mapping for firestore object - returns a promise of multiple docs 
- const collectIdsAndDocs = (doc) => {
+// mapping for firestore object - returns a promise of multiple docs 
+const collectIdsAndDocs = (doc) => {
     return { id: doc.id, ...doc.data() };
 };
 
@@ -85,34 +85,40 @@ async function getCovidDataForUserLastSevenDays(id) {
     return result;
 }
 
-async function getShiftDataBetweenDates(start, end) {
+async function getShiftDataBetweenDates(start, end, alertsOnly) {
     var result;
-
-    // The Firestore documentation mentions in its “Query limitations” section:
-    // In a compound query, range (<, <=, >, >=) and not equals (!=, not-in) comparisons must all filter on the same field.
-    // this is why we are using 'date'' as well as 'start_datetime' and 'end_datetime' in our firestore document
-
-    if (start && end) {
-        // get data from firestore with a snapshot between dates input by user
-        async function getUserDocument() {
-            const snapshot = await firestore
+    // get data from firestore with a snapshot between dates input by user
+    async function getUserDocument() {
+        // IF alertsOnly == true: ignore date params and return all with alerts
+        if (alertsOnly) {
+            var snapshot = await firestore
                 .collection('WorkshiftSchedules')
+                .orderBy("alerts", "asc")
                 .orderBy("date", "asc")
-                .where('date', '>=', start)
-                .where('date', '<=', end)
+                .where('alerts', '!=', null)
                 .get();
             console.log(snapshot)
             var myDocs = snapshot.docs.map(collectIdsAndDocs);
-            // myDocs = await mapNames(myDocs).then(function (mappedResponse) {
-            //     return mappedResponse
-            // })
-            return myDocs
+
+        } else {
+            if (start && end) {
+                var snapshot = await firestore
+                    .collection('WorkshiftSchedules')
+                    .orderBy("date", "asc")
+                    .where('date', '>=', start)
+                    .where('date', '<=', end)
+                    .get();
+                console.log(snapshot)
+                var myDocs = snapshot.docs.map(collectIdsAndDocs);
+            }
         }
-        //get firestore data
-        result = await getUserDocument().then(function (response) {
-            return response
-        })
+        return myDocs
     }
+    //get firestore data
+    result = await getUserDocument().then(function (response) {
+        return response
+    })
+
     console.log(result)
     return result;
 }
