@@ -26,6 +26,9 @@ function adminReports() {
                 <Center w="64" h="12" bg="teal.500" rounded="md" shadow={3}>
                     <Button variant="ghost" onPress={()=>{navigation.navigate("View Schedule Alerts")}}><Text bold color="white">Shifts with Alerts</Text></Button>
                 </Center>
+                <Center w="64" h="12" bg="teal.600" rounded="md" shadow={3}>
+                    <Button variant="ghost" onPress={()=>{navigation.navigate("Work Guidelines")}}><Text bold color="white">Workplace Guidelines</Text></Button>
+                </Center>
                 {/* <Center w="64" h="12" bg="teal.500" rounded="md" shadow={3}>
                     <Button variant="ghost" ><Text bold color="white">COVID-19 - Staff Affected</Text></Button>
                 </Center> */}

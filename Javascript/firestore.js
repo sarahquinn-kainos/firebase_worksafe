@@ -253,6 +253,40 @@ async function getUsersCollection() {
     return result;
 }
 
+async function getGuidelinesCollection() {
+    const user = auth.currentUser;
+    var result;
+
+    if (user) {
+        // get data from firestore with a snapshot 
+        const getUserDocument = async () => {
+            const snapshot = await firestore
+                .collection('guidelines').get();
+            const myDocs = snapshot.docs.map(collectIdsAndDocs);
+            return (myDocs)
+        }
+        result = await getUserDocument().then(function (response) {
+            return response;
+        })
+    }
+    return result;
+}
+
+async function removeGuidelinePost(id) {
+    const user = auth.currentUser;
+    if (user) {
+        // get doc ref in order to delete
+        const getDocument = async () => {
+            const snapshot = await firestore
+                .collection('guidelines').doc(id).get();
+                return snapshot;
+        }
+        await getDocument().then(function (doc) {
+            doc.ref.delete();
+        })
+    }
+}
+
 
 async function getStaffCount() {
     const user = auth.currentUser;
@@ -370,6 +404,8 @@ export {
     getShiftDataBetweenDates,
     getShiftDataBetweenDatesForUser,
     getUserDisplayName,
+    getGuidelinesCollection,
+    removeGuidelinePost,
     getAdminUids,
     isUserWorkingToday,
     getUserIsAdmin,

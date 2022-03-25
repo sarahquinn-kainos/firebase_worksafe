@@ -59,6 +59,11 @@ const showVerifiedHomeScreenContent = () => {
                     </HStack>
                     <Text>{"\n"}</Text>
                     <Button minW={"100%"}
+                        onPress={() => { navigation.navigate('View Guidelines') }}>
+                        <Text bold color="white">My Workplace Guidelines</Text>
+                    </Button>
+                    <Text>{"\n"}</Text>
+                    <Button minW={"100%"}
                         onPress={() => { navigation.navigate('CovidCheckpoint') }}>
                         <Text bold color="white">Record COVID-19 Checkpoint</Text>
                     </Button>

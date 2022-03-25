@@ -22,6 +22,8 @@ import viewScheduleForuser from './Screens/viewScheduleForUser';
 import selectShifts from './Screens/adminScreens/viewScheduleForm';
 import viewScheduleAlerts from './Screens/adminScreens/viewScheduleWithAlertsOnly';
 import viewStaffDetails from './Screens/adminScreens/reportStaffDetails';
+import manageGuidelines from './Screens/adminScreens/manageCovidGuidance';
+import viewGuidelinesForUser from './Screens/viewGuidelines';
 
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +39,7 @@ function StackNav() {
     <Stack.Screen name="Register" component={registerScreen} options={{ headerTitle: "Register a New Account", headerTitleAlign: 'center' }} />
     <Stack.Screen name="AdminDash" component={adminDashboard} options={{ headerShown: false }}  />
     <Stack.Screen name="AccountManage" component={accountManageScreen}/>
+    <Stack.Screen name="Work Guidelines" component={manageGuidelines}/>
     <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ headerTitle: "Forgot My Password", headerTitleAlign: 'center' }} />
     <Stack.Screen name="CovidCheckpoint" component={covidCheckPointModal} options={{ headerShown: false }} />
     <Stack.Screen name="VerifiedHome" component={showVerifiedHome} options={{ headerShown: false }} />
@@ -48,6 +51,7 @@ function StackNav() {
     <Stack.Screen name="View Schedule Alerts" component={viewScheduleAlerts} options={{headerBackTitleVisible: true }} />
     <Stack.Screen name="Manage Schedule" component={scheduleManageScreen} options={{ headerBackTitle: false , headerBackTitleVisible: true}} />
     <Stack.Screen name="Manage Shifts" component={shiftManageScreen} options={{ headerShown: true , headerBackTitleVisible: true}} />
+    <Stack.Screen name="View Guidelines" component={viewGuidelinesForUser} options={{ headerTitle: "Workplace Guidelines", headerShown: true , headerBackTitleVisible: true}} />
     <Stack.Screen name="View User Schedule" component={viewScheduleForuser} options={{ headerTitle: "My Schedule", headerShown: true , headerBackTitleVisible: true}} />
     <Stack.Screen name="Manage User Schedule" component={manageUserSchedule}  options={{ headerTitle: "My Schedule", headerShown: true , headerBackTitleVisible: false}} />
   </Stack.Navigator>
