@@ -274,6 +274,30 @@ async function getStaffCount() {
     return result;
 }
 
+async function getAdminUids(){
+    var id_array = []
+    var result;
+    try {
+        async function getDocument() {
+            const snapshot = await firestore
+                .collection('Users')
+                .where('account_type', 'in', ['admin', 'super_user'])
+                .get();
+            console.log(snapshot)
+            return snapshot
+        }
+        result = await getDocument().then(function (response) {
+            return response
+        })
+        result.forEach((doc) => {
+            id_array.push(doc.id)
+        })
+        return id_array;
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 
 function writeDocumentToCollection(collection, id, document) {
     // to identify docs with ID collection 
@@ -346,6 +370,7 @@ export {
     getShiftDataBetweenDates,
     getShiftDataBetweenDatesForUser,
     getUserDisplayName,
+    getAdminUids,
     isUserWorkingToday,
     getUserIsAdmin,
     getStaffCount

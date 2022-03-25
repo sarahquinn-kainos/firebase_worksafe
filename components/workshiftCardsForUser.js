@@ -1,5 +1,5 @@
-import { Card, Center, Text, VStack, HStack, Button } from 'native-base';
-import { getShiftDataBetweenDatesForUser } from '../Javascript/firestore';
+import { Card, Center, Text, VStack, HStack, Button, Input, Modal, FormControl, TextArea } from 'native-base';
+import { getAdminUids, getShiftDataBetweenDatesForUser, getSingleDocByDocId, writeDocumentToCollection } from '../Javascript/firestore';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,8 +11,12 @@ function workshiftCardsUserView() {
 
     const user = auth.currentUser
     const user_id = user.uid
+    const user_display_name = user.displayName
     const [currentInfo, setcurrentInfo] = useState("");
     const [fetched, setFetched] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [selectedShift, setSelectedShift] = useState()
+    const [reqMessage, setReqMessage] = useState('')
     const navigator = useNavigation();
     const isFocused = useIsFocused(); //when we navigate back or see this page after submitting a shift 
     //use this const to trigger a refresh of the data
@@ -47,18 +51,12 @@ function workshiftCardsUserView() {
         return data;
     }
 
-    // const editShift = (id) => {
-    //     console.log(id)
-    //     AsyncStorage.setItem('current_shift_id', id)
-    //     navigator.navigate('Manage Shifts')
-    // }
-
     useEffect(async () => {
-        
+
         var [start, end] = await getParams()
         console.log(start)
         console.log(end)
-        if (start != null && end != null){
+        if (start != null && end != null) {
             await getCurrentInfo(start, end).then((data) => {
                 setcurrentInfo(data)
                 setFetched(true)
@@ -73,12 +71,87 @@ function workshiftCardsUserView() {
         }
     }, [fetched]);
 
+    function requestScheduleChange(shift_start) {
+        setSelectedShift(shift_start);
+        setShowModal(true);
+    }
 
+    async function submitRequest() {
+        try {
+            var admins = await getAdminUids().then(response => {
+                return response
+            })
+            var email_content = {
+                toUids: admins,
+                template: {
+                    name: 'shiftChangeRequest',
+                    data: {
+                        worker_name: user_display_name,
+                        shift_date: selectedShift,
+                        message_data: reqMessage
+                    }
+                }
+            }
+            writeDocumentToCollection('mail', null, email_content).then((response)=>{
+                console.log(response)
+                alert('Request Submitted.')
+            })
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
+    const ChangeModal = () => {
+        const setValue = e =>{
+            setReqMessage(e.currentTarget.value)
+        }
+        return (
+            <Center>
+                <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+                    <Modal.Content maxWidth="400px">
+                        <Modal.CloseButton />
+                        <Modal.Header>Request Shift Change?</Modal.Header>
+                        <Modal.Body>
+                            <FormControl>
+                            <TextArea value={reqMessage} onChange={setValue}/>
+                                {/* <Input
+                                w="100%"
+                                placeholder="Optional Message"
+                                //value = {reqMessage}
+                                onChangeText={text => setReqMessage(text)}
+                                >
+                            </Input> */}
+                                {/* <TextInput
+                                    style={{ height: 40 }}
+                                    placeholder="Type here to translate!"
+                                    onChangeText={newText => setText(newText)}
+                                    defaultValue={text}
+                                /> */}
+                            </FormControl>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button.Group space={2}>
+                                <Button variant="ghost" colorScheme="blueGray" onPress={() => { setShowModal(false) }}>
+                                    Cancel
+                                </Button>
+                                <Button onPress={() => {
+                                    setShowModal(false);
+                                    submitRequest();
+                                }}>
+                                    Submit Request
+                                </Button>
+                            </Button.Group>
+                        </Modal.Footer>
+                    </Modal.Content>
+                </Modal>
+            </Center>
+        )
+    }
 
-    console.log(currentInfo)
     return (
         <Center>
+            {ChangeModal()}
             <VStack mt="4">
 
                 {currentInfo ?
@@ -126,6 +199,7 @@ function workshiftCardsUserView() {
                                                         editShift(shift_id)}
                                                         }>Request Change</Button> */}
                                             </VStack>
+                                            <Button onPress={() => { requestScheduleChange((date + " @ " + startTime)) }}>Request Change</Button>
                                         </VStack>
                                     </Center>
                                 </Card>
