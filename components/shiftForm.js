@@ -44,6 +44,7 @@ function shiftFormScreen() {
                     if (alerts) {
                         console.log(alerts)
                         setAlertData(alerts);
+                        alert("This shift contains Alerts. Submitting an edit of this shift will remove any Alerts.")
                     }
                 })
             } catch (err) {
