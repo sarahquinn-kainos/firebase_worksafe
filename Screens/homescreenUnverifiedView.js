@@ -36,8 +36,8 @@ const showUnerifiedHome = () => {
                 <Center mx="auto" w="80%" px="45" py="50" >
                     <Text>Hello {displayName}!</Text>
                     <Text>{"\n"}</Text>
-                    <Text>Your email address has not been verified</Text>
-                    <Text>Please check your inbox and spam folders.</Text>
+                    <Text bold>Your email address has not been verified</Text>
+                    <Text bold>Please check your inbox and spam folders.</Text>
                     <Text>{"\n"}</Text>
                     <Button minW={"100%"}
                         onPress={sendResetPasswordEmail}>
@@ -46,7 +46,7 @@ const showUnerifiedHome = () => {
                     <Text>{"\n"}</Text>
                     <Button minW={"100%"}
                         onPress={() => { navigation.navigate('AccountManage') }}>
-                        <Text bold color="white">DEV TEST Manage My Profile</Text>
+                        <Text bold color="white">Manage My Profile</Text>
                     </Button>
                     <Text>{"\n"}</Text>
                 </Center>
